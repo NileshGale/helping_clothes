@@ -23,7 +23,7 @@
 
 
   <div class="dashboard-welcome">
-    <h2>Welcome Back, <span id="userName">Donor</span>! 👋</h2>
+    <h2 id="welcomeText">Welcome to Helping Hands! 👋</h2>
     <p>Choose a donation category below to make a difference today.</p>
   </div>
 
@@ -259,8 +259,10 @@
 <script>
 
 window.addEventListener('DOMContentLoaded', () => {
-  const user = JSON.parse(localStorage.getItem('hh_user') || '{}');
-  if (user.name) document.getElementById('userName').textContent = user.name;
+  const user = JSON.parse(localStorage.getItem('hh_user') || 'null');
+  if (user && user.name) {
+    document.getElementById('welcomeText').textContent = `Welcome Back, ${user.name}! 👋`;
+  }
   const count = JSON.parse(localStorage.getItem('hh_donations') || '[]').length;
   document.getElementById('donationCount').textContent = count;
   renderHistory();

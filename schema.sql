@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS distributions (
 ) ENGINE=InnoDB;
 
 INSERT INTO users (name, email, mobile, password, is_active, role, created_at) VALUES
-  ('Admin User', 'Khiratkarriya@gmail.com', '9876543210', 
+  ('Admin Riya', 'Khiratkarriya@gmail.com', '9876543210', 
    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 'admin', NOW());
 
 INSERT INTO users (name, email, mobile, password, bio, city, created_at) VALUES

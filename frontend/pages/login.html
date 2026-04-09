@@ -122,7 +122,13 @@ async function handleLogin(e) {
       document.getElementById('successTitle').textContent = 'Welcome Back! 👋';
       document.getElementById('successMsg').textContent = 'You have successfully logged in. Redirecting to your dashboard...';
       document.getElementById('successPopup').classList.add('active');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
+      setTimeout(() => { 
+        if (result.user.role === 'admin') {
+          window.location.href = '../admin/dashboard.html';
+        } else {
+          window.location.href = 'dashboard.html';
+        }
+      }, 2000);
     } else {
       if (result.needs_verification) {
         sessionStorage.setItem('pending_email', result.email);
@@ -205,7 +211,12 @@ async function resendOtp() {
 
 function closeSuccess() {
   document.getElementById('successPopup').classList.remove('active');
-  window.location.href = 'dashboard.html';
+  const user = JSON.parse(localStorage.getItem('hh_user') || '{}');
+  if (user.role === 'admin') {
+    window.location.href = '../admin/dashboard.html';
+  } else {
+    window.location.href = 'dashboard.html';
+  }
 }
 </script>
 </body>

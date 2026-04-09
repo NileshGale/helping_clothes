@@ -7,12 +7,24 @@ function toggleNav() {
  * Redirects guests away from private pages.
  */
 function protectPage() {
-  const user = localStorage.getItem('hh_user');
+  const user = JSON.parse(localStorage.getItem('hh_user') || 'null');
   const path = window.location.pathname;
-  const isPrivatePage = path.includes('account.html');
   
-  if (!user && isPrivatePage) {
-    window.location.href = 'login.html';
+  const isAccountPage = path.includes('account.html');
+  const isAdminPage   = path.includes('/admin/');
+  
+  // 1. If trying to access Private/Admin page but not logged in
+  if (!user && (isAccountPage || isAdminPage)) {
+    // If in admin folder, go up to pages/login.html
+    const prefix = isAdminPage ? '../pages/' : '';
+    window.location.href = prefix + 'login.html';
+    return;
+  }
+  
+  // 2. If logged in but trying to access admin page without admin role
+  if (user && isAdminPage && user.role !== 'admin') {
+     window.location.href = '../pages/dashboard.html';
+     return;
   }
 }
 
@@ -24,31 +36,41 @@ function initNavbar() {
   const navLinks = document.getElementById('navLinks');
   if (!navLinks) return;
 
-  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+  const isAdminFolder = window.location.pathname.includes('/admin/');
+  const pagePath = isAdminFolder ? '../pages/' : '';
+  const adminPath = isAdminFolder ? '' : '../admin/';
+  
+  const currentFileName = window.location.pathname.split('/').pop() || 'index.html';
 
-  // Define All Links and their visibility
+  // Define Hrefs based on role
+  const userRole = user ? user.role : 'user';
+  const dashboardHref = (userRole === 'admin') ? (adminPath + 'dashboard.html') : (pagePath + 'dashboard.html');
+
+  // Define All Links
   const links = [
-    { href: 'index.html', text: 'Home', guest: true, private: true },
-    { href: 'dashboard.html', text: 'Dashboard', guest: false, private: true },
-    { href: 'need_help.html', text: 'Need Help', guest: true, private: true },
-    { href: 'impact.html', text: 'Impact', guest: true, private: true },
-    { href: 'feedback.html', text: 'Feedback', guest: true, private: true },
-    { href: 'contact.html', text: 'Contact Us', guest: true, private: true }
+    { href: pagePath + 'index.html', text: 'Home', guest: true, private: true },
+    { href: dashboardHref, text: 'Dashboard', guest: true, private: true },
+    { href: pagePath + 'need_help.html', text: 'Need Help', guest: true, private: true },
+    { href: pagePath + 'impact.html', text: 'Impact', guest: true, private: true },
+    { href: pagePath + 'feedback.html', text: 'Feedback', guest: true, private: true },
+    { href: pagePath + 'contact.html', text: 'Contact Us', guest: true, private: true }
   ];
 
   // Add Auth specific links
   if (user) {
-    links.push({ href: 'account.html', text: 'My Account', guest: false, private: true });
+    links.push({ href: pagePath + 'account.html', text: 'My Account', guest: false, private: true });
   } else {
-    links.push({ href: 'login.html', text: 'Login', guest: true, private: false, class: 'btn-nav' });
-    links.push({ href: 'signup.html', text: 'Sign Up', guest: true, private: false });
+    links.push({ href: pagePath + 'login.html', text: 'Login', guest: true, private: false, class: 'btn-nav' });
+    links.push({ href: pagePath + 'signup.html', text: 'Sign Up', guest: true, private: false });
   }
 
   // Build the HTML
   navLinks.innerHTML = links
     .filter(link => (user && link.private) || (!user && link.guest))
     .map(link => {
-      const isActive = currentPath === link.href ? 'active' : '';
+      // Comparison for active state needs to handle the prefix
+      const linkFileName = link.href.split('/').pop();
+      const isActive = currentFileName === linkFileName ? 'active' : '';
       const extraClass = link.class || '';
       return `<li><a href="${link.href}" class="${isActive} ${extraClass}">${link.text}</a></li>`;
     })
