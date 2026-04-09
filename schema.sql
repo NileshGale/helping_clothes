@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
   city        VARCHAR(100),
   profile_pic VARCHAR(300),
   is_active   TINYINT(1)          NOT NULL DEFAULT 0,
+  role        ENUM('user', 'admin') NOT NULL DEFAULT 'user',
   created_at  DATETIME            NOT NULL,
   updated_at  DATETIME            ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_email (email)
@@ -77,6 +78,35 @@ CREATE TABLE IF NOT EXISTS contact_messages (
   created_at  DATETIME            NOT NULL,
   INDEX idx_read (is_read)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS help_requests (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id     INT UNSIGNED NOT NULL,
+  category    VARCHAR(50)         NOT NULL,
+  items       TEXT                NOT NULL,
+  reason      TEXT                NOT NULL,
+  status      ENUM('pending','approved','fulfilled','rejected') 
+              NOT NULL DEFAULT 'pending',
+  created_at  DATETIME            NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS distributions (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  request_id  INT UNSIGNED NOT NULL,
+  donation_id INT UNSIGNED,
+  admin_id    INT UNSIGNED,
+  proof_image VARCHAR(300),
+  notes       TEXT,
+  distributed_at DATETIME         NOT NULL,
+  FOREIGN KEY (request_id) REFERENCES help_requests(id) ON DELETE CASCADE,
+  FOREIGN KEY (donation_id) REFERENCES donations(id) ON DELETE SET NULL,
+  FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+INSERT INTO users (name, email, mobile, password, is_active, role, created_at) VALUES
+  ('Admin User', 'Khiratkarriya@gmail.com', '9876543210', 
+   '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 'admin', NOW());
 
 INSERT INTO users (name, email, mobile, password, bio, city, created_at) VALUES
   ('Priya Sharma',   'priya@example.com',  '9876543210',

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login — Helping Hands</title>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <style>
+    .admin-login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+    }
+    .admin-card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .admin-logo { font-size: 3rem; margin-bottom: 20px; display: block; }
+  </style>
+</head>
+<body>
+
+<div class="admin-login-wrap">
+  <div class="admin-card">
+    <span class="admin-logo">🛡️</span>
+    <h2 style="font-family:'Playfair Display',serif; margin-bottom:8px;">Admin Portal</h2>
+    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:32px;">Please sign in to manage the platform</p>
+    
+    <form id="adminLoginForm">
+      <div class="form-group" style="text-align:left;">
+        <label>Admin Email</label>
+        <input type="email" id="email" placeholder="admin@example.com" required/>
+      </div>
+      <div class="form-group" style="text-align:left;">
+        <label>Master Password</label>
+        <input type="password" id="password" placeholder="••••••••" required/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:12px;">Access Dashboard 🔑</button>
+    </form>
+    
+    <div style="margin-top:24px;">
+      <a href="../pages/index.html" style="color:var(--text-muted); text-decoration:none; font-size:0.85rem;">← Back to Main Website</a>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/app.js"></script>
+<script>
+document.getElementById('adminLoginForm').onsubmit = async (e) => {
+  e.preventDefault();
+  
+  const formData = {
+    email: document.getElementById('email').value,
+    password: document.getElementById('password').value
+  };
+
+  try {
+    const response = await fetch('../../backend/api/admin/login.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      localStorage.setItem('hh_admin', JSON.stringify(result.user));
+      window.location.href = 'dashboard.html';
+    } else {
+      customAlert(result.message || 'Login failed.', 'Admin Auth', '❌');
+    }
+  } catch (err) {
+    console.error(err);
+    customAlert('Failed to connect to administrative server.', 'Error', '❌');
+  }
+};
+</script>
+</body>
+</html>

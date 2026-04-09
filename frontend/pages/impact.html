@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Impact — Helping Hands</title>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🤝</div>
+    <span>Helping Hands</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="need_help.html">Need Help</a></li>
+    <li><a href="impact.html" class="active">Impact</a></li>
+    <li><a href="feedback.html">Feedback</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleNav()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="page-hero" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+  <h1>Our Impact 🌎</h1>
+  <p>Transparency in action — seeing where your donations go</p>
+</div>
+
+<div style="max-width:1100px; margin: 40px auto; padding: 0 20px;">
+  <div class="section-header">
+    <h2>Success Stories</h2>
+    <p>Every donation listed here represents a fulfilled promise to someone in our community.</p>
+  </div>
+
+  <div id="impactList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:24px;">
+    <!-- Loading state -->
+    <div style="text-align:center; grid-column: 1/-1; padding: 40px; color:var(--text-muted);">
+      <p>Loading the impact stories...</p>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', fetchImpact);
+
+async function fetchImpact() {
+  const list = document.getElementById('impactList');
+  try {
+    const response = await fetch('../../backend/api/get_impact.php');
+    const result = await response.json();
+    
+    if (result.success && result.impact.length > 0) {
+      list.innerHTML = result.impact.map(item => `
+        <div class="dash-card" style="text-align:left; padding:0; overflow:hidden; border-radius:18px;">
+          ${item.proof_image ? `<div style="height:200px; background:url('../../backend/uploads/${item.proof_image}') center/cover;"></div>` : 
+                               `<div style="height:200px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-size:4rem;">🎁</div>`}
+          <div style="padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <span style="background:var(--primary-light); color:var(--primary); padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:600;">${item.category.toUpperCase()}</span>
+              <span style="color:var(--text-muted); font-size:0.8rem;">${new Date(item.distributed_at).toLocaleDateString()}</span>
+            </div>
+            <h3 style="margin-bottom:8px; font-size:1.1rem;">Delivered to ${item.receiver_name}</h3>
+            <p style="font-size:0.88rem; line-height:1.6; margin-bottom:12px;">${item.story || 'Donation successfully delivered to fulfill a local community request.'}</p>
+            <div style="border-top:1px solid var(--border); padding-top:12px; font-size:0.8rem; color:var(--text-emerald); display:flex; align-items:center; gap:6px;">
+              <span>Verified Proof</span> ✓
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      list.innerHTML = `
+        <div style="text-align:center; grid-column: 1/-1; padding: 80px; background: var(--bg2); border-radius: 20px;">
+          <div style="font-size:3.5rem; margin-bottom:16px;">✨</div>
+          <h3>The journey is just beginning!</h3>
+          <p>Our first success stories are currently being documented. Check back soon.</p>
+        </div>
+      `;
+    }
+  } catch (err) {
+    console.error(err);
+    list.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Failed to load impact stories.</p>';
+  }
+}
+</script>
+</body>
+</html>

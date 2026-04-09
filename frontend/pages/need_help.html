@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Need Help — Helping Hands</title>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🤝</div>
+    <span>Helping Hands</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="need_help.html" class="active">Need Help</a></li>
+    <li><a href="impact.html">Impact</a></li>
+    <li><a href="feedback.html">Feedback</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleNav()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="page-hero" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
+  <h1>Request Support 🆘</h1>
+  <p>Share your needs with us and we'll do our best to help you</p>
+</div>
+
+<div class="contact-section">
+  <div class="contact-grid" style="grid-template-columns: 1fr;">
+    <div class="contact-form" style="max-width: 600px; margin: 0 auto;">
+      <h3>Submit Your Request</h3>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:24px;">
+        Please tell us exactly what you need and why. Our team reviews every request and matches them with donated items.
+      </p>
+      
+      <form onsubmit="submitHelpRequest(event)">
+        <div class="form-group">
+          <label>Type of Clothing Needed</label>
+          <select id="reqCategory" required>
+            <option value="">Select Clothing Type</option>
+            <option value="Shirt">Shirt</option>
+            <option value="T-Shirt">T-Shirt</option>
+            <option value="Pant">Pant / Jeans</option>
+            <option value="Jacket">Jacket / Sweater</option>
+            <option value="Saree">Saree</option>
+            <option value="Kidswear">Kids Wear</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>What specific items do you need?</label>
+          <textarea id="reqItems" placeholder="Example: School books for 5th grade, Warm clothes for kids..." required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Reason for Request</label>
+          <textarea id="reqReason" placeholder="Tell us a bit about your situation..." style="min-height:120px;" required></textarea>
+        </div>
+
+        <div style="background: var(--bg2); padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+          <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">
+            <strong>Note:</strong> We prioritize requests based on urgency and item availability. Submitting a request does not guarantee fulfillment, but we try our best for everyone.
+          </p>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Submit My Request 🕊️</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/app.js"></script>
+<script>
+async function submitHelpRequest(e) {
+  e.preventDefault();
+  
+  const user = JSON.parse(localStorage.getItem('hh_user'));
+  if (!user) {
+    await customAlert('Please login to submit a help request.', 'Authentication Required', '🔒');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const formData = {
+    user_id: user.id,
+    category: document.getElementById('reqCategory').value,
+    items: document.getElementById('reqItems').value,
+    reason: document.getElementById('reqReason').value
+  };
+
+  try {
+    const response = await fetch('../../backend/api/submit_request.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      await customAlert('Your request has been submitted to our admin team. We will contact you soon.', 'Request Submitted', '✅');
+      e.target.reset();
+    } else {
+      customAlert(result.message || 'Error submitting request.', 'Error', '❌');
+    }
+  } catch (err) {
+    console.error(err);
+    customAlert('Failed to connect to server.', 'Error', '❌');
+  }
+}
+</script>
+</body>
+</html>

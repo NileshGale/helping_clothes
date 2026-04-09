@@ -24,22 +24,38 @@ function initNavbar() {
   const navLinks = document.getElementById('navLinks');
   if (!navLinks) return;
 
+  // Add Public Links that might be missing (Need Help, Impact)
+  const publicLinks = [
+    { href: 'need_help.html', text: 'Need Help' },
+    { href: 'impact.html', text: 'Impact' }
+  ];
+
+  publicLinks.forEach(link => {
+    if (!navLinks.querySelector(`a[href="${link.href}"]`)) {
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="${link.href}">${link.text}</a>`;
+      // Insert before Feedback/Contact if they exist, or just append
+      const feedbackLink = navLinks.querySelector('a[href="feedback.html"]');
+      if (feedbackLink) {
+        navLinks.insertBefore(li, feedbackLink.parentElement);
+      } else {
+        navLinks.appendChild(li);
+      }
+    }
+  });
+
   if (user) {
     // Remove guest links
     const guestLinks = navLinks.querySelectorAll('a[href="login.html"], a[href="signup.html"]');
     guestLinks.forEach(link => link.parentElement.remove());
 
-    // Add private links if they don't already exist in the flow
+    // Add private links
     if (!navLinks.querySelector('a[href="dashboard.html"]')) {
       const dashLi = document.createElement('li');
       dashLi.innerHTML = `<a href="dashboard.html">Dashboard</a>`;
-      navLinks.appendChild(dashLi);
+      // Insert at the beginning or after Home
+      navLinks.insertBefore(dashLi, navLinks.firstChild.nextSibling); 
     }
-
-    // Add Logout Button
-    const logoutLi = document.createElement('li');
-    logoutLi.innerHTML = `<a href="#" onclick="handleLogout()" class="btn-nav" style="background:#e84a5f;">Logout</a>`;
-    navLinks.appendChild(logoutLi);
   }
 }
 
