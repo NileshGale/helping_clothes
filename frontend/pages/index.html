@@ -16,7 +16,7 @@
   </a>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html" class="active">Home</a></li>
-    <li><a href="auth.html" class="btn-nav">Login / Sign Up</a></li>
+    <li><a href="login.html" class="btn-nav">Login</a></li><li><a href="signup.html">Sign Up</a></li>
     <li><a href="dashboard.html">Dashboard</a></li>
     <li><a href="feedback.html">Feedback</a></li>
     <li><a href="contact.html">Contact Us</a></li>
@@ -38,7 +38,7 @@
     <h1>Give What You Don't Need,<br/><span>Change Someone's</span> World</h1>
     <p>Helping Hands connects generous donors with people in need. Donate your unused clothes, toys, stationery and more — we'll make sure they reach those who need them most.</p>
     <div class="hero-btns">
-      <a href="auth.html" class="btn btn-primary">🎁 Start Donating</a>
+      <a href="login.html" class="btn btn-primary" id="heroBtn">🎁 Start Donating</a>
       <a href="#categories" class="btn btn-outline">Learn More</a>
     </div>
   </div>
@@ -81,7 +81,7 @@
       <p style="color:var(--text-muted);line-height:1.9;font-size:1.05rem;margin-bottom:24px;">
         We provide a seamless platform to donate your gently used items. Just fill out a form, upload a photo, and our volunteer team will pick up the items from your doorstep.
       </p>
-      <a href="auth.html" class="btn btn-primary">Join Us Today →</a>
+      <a href="login.html" class="btn btn-primary">Join Us Today →</a>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
       <div style="background:var(--primary-light);border-radius:14px;padding:20px;text-align:center;">
@@ -242,7 +242,7 @@
 <section style="background:var(--primary);padding:70px 40px;text-align:center;">
   <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);color:white;margin-bottom:14px;">Ready to Make a Difference?</h2>
   <p style="color:rgba(255,255,255,0.8);font-size:1.1rem;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;margin-bottom:32px;">Join thousands of donors and start giving today. It takes less than 5 minutes.</p>
-  <a href="auth.html" class="btn" style="background:white;color:var(--primary);font-weight:700;font-size:1.05rem;padding:16px 40px;">Get Started Free 🎁</a>
+  <a href="login.html" class="btn" style="background:white;color:var(--primary);font-weight:700;font-size:1.05rem;padding:16px 40px;">Get Started Free 🎁</a>
 </section>
 
 
@@ -259,7 +259,7 @@
       <h4>Quick Links</h4>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="auth.html">Login / Sign Up</a></li>
+        <li><a href="login.html" class="btn-nav">Login</a></li><li><a href="signup.html">Sign Up</a></li>
         <li><a href="dashboard.html">Dashboard</a></li>
       </ul>
     </div>
@@ -286,5 +286,16 @@
 </footer>
 
 <script src="../assets/js/app.js"></script>
+<script>
+  // Dynamic Hero Button
+  const user = localStorage.getItem('hh_user');
+  if (user) {
+    const heroBtn = document.getElementById('heroBtn');
+    if (heroBtn) {
+      heroBtn.href = 'dashboard.html';
+      heroBtn.textContent = '🏠 Go to Dashboard';
+    }
+  }
+</script>
 </body>
 </html>

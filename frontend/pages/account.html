@@ -15,7 +15,7 @@
   </a>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">Home</a></li>
-    <li><a href="auth.html">Login / Sign Up</a></li>
+    <li><a href="login.html" class="btn-nav">Login</a></li><li><a href="signup.html">Sign Up</a></li>
     <li><a href="dashboard.html">Dashboard</a></li>
     <li><a href="feedback.html">Feedback</a></li>
     <li><a href="contact.html">Contact Us</a></li>
@@ -201,10 +201,7 @@ function saveAccount(e) {
   document.getElementById('savePopup').classList.add('active');
 }
 
-function handleLogout() {
-  localStorage.removeItem('hh_user');
-  document.getElementById('logoutPopup').classList.add('active');
-}
+// handleLogout now handled globally by app.js
 
 function confirmDelete() {
   if (confirm('Are you absolutely sure you want to delete your account? This cannot be undone.')) {

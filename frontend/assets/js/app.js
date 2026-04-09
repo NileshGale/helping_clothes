@@ -1,6 +1,55 @@
-
 function toggleNav() {
   document.getElementById('navLinks').classList.toggle('open');
+}
+
+/**
+ * Global Auth Guard
+ * Redirects guests away from private pages.
+ */
+function protectPage() {
+  const user = localStorage.getItem('hh_user');
+  const path = window.location.pathname;
+  const isPrivatePage = path.includes('account.html') || 
+                        path.includes('feedback.html') || 
+                        path.includes('contact.html');
+  
+  if (!user && isPrivatePage) {
+    window.location.href = 'login.html';
+  }
+}
+
+/**
+ * Initalizes the navbar based on login status
+ */
+function initNavbar() {
+  const user = JSON.parse(localStorage.getItem('hh_user') || 'null');
+  const navLinks = document.getElementById('navLinks');
+  if (!navLinks) return;
+
+  if (user) {
+    // Remove guest links
+    const guestLinks = navLinks.querySelectorAll('a[href="login.html"], a[href="signup.html"]');
+    guestLinks.forEach(link => link.parentElement.remove());
+
+    // Add private links if they don't already exist in the flow
+    if (!navLinks.querySelector('a[href="dashboard.html"]')) {
+      const dashLi = document.createElement('li');
+      dashLi.innerHTML = `<a href="dashboard.html">Dashboard</a>`;
+      navLinks.appendChild(dashLi);
+    }
+
+    // Add Logout Button
+    const logoutLi = document.createElement('li');
+    logoutLi.innerHTML = `<a href="#" onclick="handleLogout()" class="btn-nav" style="background:#e84a5f;">Logout</a>`;
+    navLinks.appendChild(logoutLi);
+  }
+}
+
+function handleLogout() {
+  if (confirm('Are you sure you want to logout?')) {
+    localStorage.removeItem('hh_user');
+    window.location.href = 'index.html';
+  }
 }
 
 document.addEventListener('click', (e) => {
@@ -31,7 +80,11 @@ function animateOnScroll() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', animateOnScroll);
+document.addEventListener('DOMContentLoaded', () => {
+  protectPage();
+  initNavbar();
+  animateOnScroll();
+});
 
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', (e) => {
