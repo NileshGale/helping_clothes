@@ -141,8 +141,14 @@ window.handleLogout = async function() {
   const confirmed = await customConfirm('Are you sure you want to logout?', 'Logout', '🚪');
   if (confirmed) {
     localStorage.removeItem('hh_user');
-    sessionStorage.clear(); // Clear any pending OTP data or session flags
-    window.location.href = 'login.html';
+    sessionStorage.clear(); 
+    
+    // Determine the root path for redirecting to index.html
+    const isAdmin = window.location.pathname.includes('/admin/');
+    const redirectPrefix = isAdmin ? '../pages/' : '';
+    
+    // Pass a logout flag in the URL
+    window.location.href = redirectPrefix + 'index.html?logout=success';
   }
 };
 
@@ -179,6 +185,14 @@ document.addEventListener('DOMContentLoaded', () => {
   protectPage();
   initNavbar();
   animateOnScroll();
+  
+  // Check for logout success message
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('logout') === 'success') {
+    // Show alert and then clear the URL
+    customAlert('You have been logged out successfully. See you again! 👋', 'Logout Success', '✨');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 });
 
 document.querySelectorAll('a[href^="#"]').forEach(a => {
