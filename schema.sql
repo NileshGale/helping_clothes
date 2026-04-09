@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS distributions (
 
 INSERT INTO users (name, email, mobile, password, is_active, role, created_at) VALUES
   ('Admin Riya', 'Khiratkarriya@gmail.com', '9876543210', 
-   '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 'admin', NOW());
+   '$2y$10$dPeAasdVk3Fn3RApGKUWI.LS1BlC6m8Uxrjtwh0FacIG6fgxwTxzS', 1, 'admin', NOW());
 
 INSERT INTO users (name, email, mobile, password, bio, city, created_at) VALUES
   ('Priya Sharma',   'priya@example.com',  '9876543210',
@@ -151,3 +151,5 @@ CREATE OR REPLACE VIEW v_published_feedback AS
   FROM feedback
   WHERE is_published = 1
   ORDER BY created_at DESC;
+
+-- End of Schema

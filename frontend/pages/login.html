@@ -123,7 +123,8 @@ async function handleLogin(e) {
       document.getElementById('successMsg').textContent = 'You have successfully logged in. Redirecting to your dashboard...';
       document.getElementById('successPopup').classList.add('active');
       setTimeout(() => { 
-        if (result.user.role === 'admin') {
+        const role = (result.user.role || '').toLowerCase();
+        if (role === 'admin') {
           window.location.href = '../admin/dashboard.html';
         } else {
           window.location.href = 'dashboard.html';
@@ -212,7 +213,9 @@ async function resendOtp() {
 function closeSuccess() {
   document.getElementById('successPopup').classList.remove('active');
   const user = JSON.parse(localStorage.getItem('hh_user') || '{}');
-  if (user.role === 'admin') {
+  const role = (user.role || '').toLowerCase();
+  
+  if (role === 'admin') {
     window.location.href = '../admin/dashboard.html';
   } else {
     window.location.href = 'dashboard.html';

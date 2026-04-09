@@ -351,9 +351,18 @@ async function submitDistribution(e) {
   }
 }
 
-// Global init
-window.onload = loadStats;
+<script src="../assets/js/app.js"></script>
+<script>
+// Global Auth & Security
+protectPage();
 
-</script>
+async function logout() {
+  await handleLogout();
+}
+
+// Global init
+window.onload = () => {
+  loadStats();
+};
 </body>
 </html>
