@@ -7,6 +7,8 @@ try {
     $requests  = $pdo->query('SELECT COUNT(*) FROM help_requests WHERE status != "fulfilled"')->fetchColumn();
     $users     = $pdo->query('SELECT COUNT(*) FROM users WHERE role = "user"')->fetchColumn();
     $impact    = $pdo->query('SELECT COUNT(*) FROM distributions')->fetchColumn();
+    $messages  = $pdo->query('SELECT COUNT(*) FROM contact_messages WHERE is_read = 0')->fetchColumn();
+    $feedback  = $pdo->query('SELECT COUNT(*) FROM feedback WHERE is_published = 0')->fetchColumn();
 
     echo json_encode([
         'success' => true,
@@ -14,7 +16,9 @@ try {
             'donations' => $donations,
             'requests'  => $requests,
             'users'     => $users,
-            'impact'    => $impact
+            'impact'    => $impact,
+            'messages'  => $messages,
+            'feedback'  => $feedback
         ]
     ]);
 } catch (PDOException $e) {

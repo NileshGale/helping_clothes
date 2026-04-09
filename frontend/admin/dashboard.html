@@ -51,6 +51,8 @@
       <li><a href="#" onclick="switchTab('stats')" class="active">📊 Overview</a></li>
       <li><a href="#" onclick="switchTab('donations')">👕 Donations</a></li>
       <li><a href="#" onclick="switchTab('requests')">🆘 Help Requests</a></li>
+      <li><a href="#" onclick="switchTab('feedback')">💬 User Feedback</a></li>
+      <li><a href="#" onclick="switchTab('inbox')">📧 Support Inbox</a></li>
       <li><a href="#" onclick="switchTab('users')">👥 User Management</a></li>
       <li><a href="#" onclick="switchTab('distributions')">📸 Proof & Impact</a></li>
     </ul>
@@ -70,6 +72,8 @@
         <div class="admin-stat"><div class="num" id="stat-requests">-</div><div class="lab">Active Requests</div></div>
         <div class="admin-stat"><div class="num" id="stat-users">-</div><div class="lab">Registered Users</div></div>
         <div class="admin-stat"><div class="num" id="stat-impact">-</div><div class="lab">Families Helped</div></div>
+        <div class="admin-stat"><div class="num" id="stat-feedback">-</div><div class="lab" style="color:#f57f17;">Pending Feedback</div></div>
+        <div class="admin-stat"><div class="num" id="stat-messages">-</div><div class="lab" style="color:#1976d2;">New Messages</div></div>
       </div>
       
       <div style="background:white; padding:32px; border-radius:20px; box-shadow:var(--shadow);">
@@ -135,6 +139,40 @@
       </table>
     </div>
 
+    <!-- Tab: Feedback -->
+    <div id="tab-feedback" class="tab-pane">
+      <h2 style="font-family:'Playfair Display',serif; margin-bottom:24px;">User Feedback Moderation</h2>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Rating</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="feedbackTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Tab: Inbox -->
+    <div id="tab-inbox" class="tab-pane">
+      <h2 style="font-family:'Playfair Display',serif; margin-bottom:24px;">Support Inbox</h2>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>From</th>
+            <th>Subject</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="inboxTableBody"></tbody>
+      </table>
+    </div>
+
     <!-- Tab: Distributions (Recording Proof) -->
     <div id="tab-distributions" class="tab-pane">
        <h2 style="font-family:'Playfair Display',serif; margin-bottom:24px;">Record Distribution (Proof of Impact)</h2>
@@ -158,34 +196,27 @@
              </div>
              <button type="submit" class="btn btn-primary btn-full">Post Success Story 🚀</button>
           </form>
-       </div>
-    </div>
-
-  </main>
-</div>
-
-<script src="../assets/js/app.js"></script>
+       </div><script src="../assets/js/app.js"></script>
 <script>
-// Check Admin Auth
-const admin = JSON.parse(localStorage.getItem('hh_admin'));
-if (!admin) window.location.href = 'login.html';
-
-function adminLogout() {
-  localStorage.removeItem('hh_admin');
-  window.location.href = 'login.html';
-}
+// Dashboard State & Auth
+const user = JSON.parse(localStorage.getItem('hh_user') || 'null');
+protectPage(); // Security Guard
 
 function switchTab(tab) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.side-nav a').forEach(a => a.classList.remove('active'));
   
-  document.getElementById('tab-' + tab).classList.add('active');
-  event.target.classList.add('active');
+  const targetPane = document.getElementById('tab-' + tab);
+  if (targetPane) targetPane.classList.add('active');
+  
+  if (event) event.target.classList.add('active');
   
   // Load specialized data
   if (tab === 'stats') loadStats();
   if (tab === 'donations') loadDonations();
   if (tab === 'requests') loadRequests();
+  if (tab === 'feedback') loadFeedback();
+  if (tab === 'inbox') loadInbox();
   if (tab === 'users') loadUsers();
   if (tab === 'distributions') loadDistributionSelects();
 }
@@ -198,6 +229,8 @@ async function loadStats() {
     document.getElementById('stat-requests').textContent = d.stats.requests;
     document.getElementById('stat-users').textContent = d.stats.users;
     document.getElementById('stat-impact').textContent = d.stats.impact;
+    document.getElementById('stat-feedback').textContent = d.stats.feedback;
+    document.getElementById('stat-messages').textContent = d.stats.messages;
   }
 }
 
@@ -209,35 +242,13 @@ async function loadDonations() {
       <tr>
         <td><strong>${item.user_name}</strong></td>
         <td>${item.category}</td>
-        <td>${item.description.substring(0,30)}...</td>
+        <td>${item.description ? item.description.substring(0,30) + '...' : 'No description'}</td>
         <td><span class="status-badge status-${item.status}">${item.status}</span></td>
         <td>${new Date(item.created_at).toLocaleDateString()}</td>
-        <td>
-          <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="updateDonation('${item.id}', 'confirmed')">Confirm</button>
-          <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="updateDonation('${item.id}', 'delivered')">Deliver</button>
-        </td>
+        <td><button class="btn btn-sm" onclick="alert('Update status feature coming soon')">Update</button></td>
       </tr>
     `).join('');
   }
-}
-
-async function loadUsers() {
-   const res = await fetch('../../backend/api/admin/manage_users.php?action=list');
-   const d = await res.json();
-   if (d.success) {
-     document.getElementById('usersTableBody').innerHTML = d.data.map(item => `
-       <tr>
-         <td>#${item.id}</td>
-         <td>${item.name}</td>
-         <td>${item.email}</td>
-         <td>${item.city || '-'}</td>
-         <td><strong>${item.role}</strong></td>
-         <td>
-           <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteUser(${item.id})">Delete</button>
-         </td>
-       </tr>
-     `).join('');
-   }
 }
 
 async function loadRequests() {
@@ -247,58 +258,91 @@ async function loadRequests() {
     document.getElementById('requestsTableBody').innerHTML = d.data.map(item => `
       <tr>
         <td><strong>${item.user_name}</strong></td>
-        <td><span class="status-badge" style="background:var(--bg2); color:var(--text);">${item.category}</span></td>
-        <td>${item.items.substring(0,30)}...</td>
+        <td>${item.category}</td>
+        <td>${item.items}</td>
         <td>${item.reason.substring(0,30)}...</td>
         <td><span class="status-badge status-${item.status}">${item.status}</span></td>
+        <td><button class="btn btn-sm" onclick="alert('Fulfill feature coming soon')">Action</button></td>
+      </tr>
+    `).join('');
+  }
+}
+
+async function loadFeedback() {
+  const res = await fetch('../../backend/api/admin/manage_feedback.php?action=list');
+  const d = await res.json();
+  if (d.success) {
+    document.getElementById('feedbackTableBody').innerHTML = d.data.map(item => `
+      <tr>
+        <td>${item.name}<br><small>${item.email}</small></td>
+        <td>${'⭐'.repeat(item.rating)}</td>
+        <td>${item.message}</td>
+        <td><span class="status-badge ${item.is_published ? 'status-delivered' : 'status-pending'}">
+          ${item.is_published ? 'Published' : 'Pending'}
+        </span></td>
         <td>
-          <button class="btn btn-primary" style="padding:4px 8px; font-size:0.75rem;" onclick="updateRequest('${item.id}', 'approved')">Approve</button>
+          ${!item.is_published ? `<button class="btn btn-sm" onclick="approveFeedback(${item.id})">Approve</button>` : ''}
+          <button class="btn btn-sm btn-danger" onclick="deleteFeedback(${item.id})">Delete</button>
         </td>
       </tr>
     `).join('');
   }
 }
 
-async function updateDonation(id, status) {
-  const fd = new FormData();
-  fd.append('id', id);
-  fd.append('status', status);
-  const res = await fetch('../../backend/api/admin/manage_donations.php?action=update', {
-    method: 'POST',
-    body: fd
-  });
+async function loadInbox() {
+  const res = await fetch('../../backend/api/admin/manage_messages.php?action=list');
   const d = await res.json();
   if (d.success) {
-    customAlert(d.message, 'Success', '✅');
-    loadDonations();
-    loadStats();
+    document.getElementById('inboxTableBody').innerHTML = d.data.map(item => `
+      <tr>
+        <td>${item.name}<br><small>${item.email}</small></td>
+        <td>${item.subject}</td>
+        <td>${item.message}</td>
+        <td><span class="status-badge ${item.is_read ? '' : 'status-pending'}">
+          ${item.is_read ? 'Read' : 'New'}
+        </span></td>
+        <td>
+           ${!item.is_read ? `<button class="btn btn-sm" onclick="markMessageRead(${item.id})">Mark Read</button>` : ''}
+        </td>
+      </tr>
+    `).join('');
   }
 }
 
-async function updateRequest(id, status) {
-  const res = await fetch('../../backend/api/admin/manage_requests.php?action=update', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, status })
-  });
+async function loadUsers() {
+  const res = await fetch('../../backend/api/admin/manage_users.php?action=list');
   const d = await res.json();
   if (d.success) {
-    customAlert(d.message, 'Success', '✅');
-    loadRequests();
-    loadStats();
+    document.getElementById('usersTableBody').innerHTML = d.data.map(u => `
+      <tr>
+        <td>${u.id}</td>
+        <td>${u.name}</td>
+        <td>${u.email}</td>
+        <td>${u.city || 'N/A'}</td>
+        <td><strong>${u.role}</strong></td>
+        <td><button class="btn btn-sm" onclick="alert('Manage user coming soon')">Edit</button></td>
+      </tr>
+    `).join('');
   }
 }
 
-async function deleteUser(id) {
-  if (await customConfirm('Are you sure you want to delete this user?')) {
-    const res = await fetch('../../backend/api/admin/manage_users.php?action=delete&id=' + id);
-    const d = await res.json();
-    if (d.success) {
-      customAlert(d.message, 'Success', '✅');
-      loadUsers();
-      loadStats();
-    }
+async function approveFeedback(id) {
+  if (confirm('Approve this feedback for the public website?')) {
+    const res = await fetch('../../backend/api/admin/manage_feedback.php?action=approve&id=' + id);
+    if ((await res.json()).success) { loadFeedback(); loadStats(); }
   }
+}
+
+async function deleteFeedback(id) {
+  if (confirm('Permanently delete this feedback?')) {
+    const res = await fetch('../../backend/api/admin/manage_feedback.php?action=delete&id=' + id);
+    if ((await res.json()).success) loadFeedback();
+  }
+}
+
+async function markMessageRead(id) {
+  const res = await fetch('../../backend/api/admin/manage_messages.php?action=mark_read&id=' + id);
+  if ((await res.json()).success) loadInbox();
 }
 
 async function loadDistributionSelects() {
@@ -306,9 +350,7 @@ async function loadDistributionSelects() {
     fetch('../../backend/api/admin/manage_requests.php?action=list'),
     fetch('../../backend/api/admin/manage_donations.php?action=list')
   ]);
-  
-  const reqD = await reqRes.json();
-  const donD = await donRes.json();
+  const [reqD, donD] = await Promise.all([reqRes.json(), donRes.json()]);
   
   if (reqD.success) {
     const filtered = reqD.data.filter(r => r.status !== 'fulfilled');
@@ -325,12 +367,10 @@ async function loadDistributionSelects() {
 
 async function submitDistribution(e) {
   e.preventDefault();
-  const adminData = JSON.parse(localStorage.getItem('hh_admin'));
-  
   const formData = {
     request_id: document.getElementById('distRequest').value,
     donation_id: document.getElementById('distDonation').value || null,
-    admin_id: adminData.id,
+    admin_id: user.id,
     notes: document.getElementById('distNotes').value,
     proof_image: document.getElementById('distImage').value
   };
@@ -343,7 +383,7 @@ async function submitDistribution(e) {
   
   const d = await res.json();
   if (d.success) {
-    await customAlert('Impact story published successfully!', 'Impact Created', '🚀');
+    customAlert('Impact story published successfully!', 'Impact Created', '🚀');
     e.target.reset();
     loadStats();
   } else {
@@ -351,18 +391,19 @@ async function submitDistribution(e) {
   }
 }
 
-<script src="../assets/js/app.js"></script>
-<script>
-// Global Auth & Security
-protectPage();
-
-async function logout() {
-  await handleLogout();
+function adminLogout() {
+  handleLogout();
 }
 
 // Global init
 window.onload = () => {
   loadStats();
 };
+</script>
+    </div>
+
+  </main>
+</div>
+
 </body>
 </html>
