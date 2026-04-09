@@ -43,8 +43,69 @@ function initNavbar() {
   }
 }
 
-function handleLogout() {
-  if (confirm('Are you sure you want to logout?')) {
+/**
+ * Custom Dialog System
+ */
+let modalResolve;
+
+function initCustomDialog() {
+  if (document.getElementById('customModal')) return;
+  
+  const modalHTML = `
+    <div class="custom-modal-overlay" id="customModal">
+      <div class="custom-dialog-box">
+        <span class="dialog-icon" id="dialogIcon">❓</span>
+        <h3 class="dialog-title" id="dialogTitle">Confirm</h3>
+        <p class="dialog-msg" id="dialogMsg">Are you sure?</p>
+        <div class="dialog-actions">
+          <button class="dialog-btn btn-cancel" id="dialogCancelBtn">Cancel</button>
+          <button class="dialog-btn btn-confirm" id="dialogOkBtn">OK</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+  
+  document.getElementById('dialogOkBtn').onclick = () => finishCustomDialog(true);
+  document.getElementById('dialogCancelBtn').onclick = () => finishCustomDialog(false);
+}
+
+function showCustomModal(config) {
+  initCustomDialog();
+  const modal = document.getElementById('customModal');
+  document.getElementById('dialogTitle').textContent = config.title || 'Message';
+  document.getElementById('dialogMsg').textContent = config.message || '';
+  document.getElementById('dialogIcon').textContent = config.icon || '💬';
+  
+  const cancelBtn = document.getElementById('dialogCancelBtn');
+  cancelBtn.style.display = config.showCancel ? 'block' : 'none';
+  
+  modal.classList.add('active');
+  
+  return new Promise(resolve => {
+    modalResolve = resolve;
+  });
+}
+
+function finishCustomDialog(result) {
+  document.getElementById('customModal').classList.remove('active');
+  if (modalResolve) {
+    modalResolve(result);
+    modalResolve = null;
+  }
+}
+
+window.customAlert = (message, title = 'Alert', icon = '🔔') => {
+  return showCustomModal({ title, message, icon, showCancel: false });
+};
+
+window.customConfirm = (message, title = 'Confirm', icon = '❓') => {
+  return showCustomModal({ title, message, icon, showCancel: true });
+};
+
+async function handleLogout() {
+  const confirmed = await customConfirm('Are you sure you want to logout?');
+  if (confirmed) {
     localStorage.removeItem('hh_user');
     window.location.href = 'index.html';
   }
@@ -79,6 +140,7 @@ function animateOnScroll() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  initCustomDialog();
   protectPage();
   initNavbar();
   animateOnScroll();

@@ -273,10 +273,10 @@ window.addEventListener('DOMContentLoaded', () => {
   renderHistory();
 });
 
-function openModal(type) {
+async function openModal(type) {
   const user = localStorage.getItem('hh_user');
   if (!user) {
-    alert('Please login to continue with your donation.');
+    await customAlert('Please login to continue with your donation.', 'Authentication Required', '🔒');
     window.location.href = 'login.html';
     return;
   }

@@ -149,11 +149,11 @@ function setRating(val) {
   });
 }
 
-function submitFeedback(e) {
+async function submitFeedback(e) {
   e.preventDefault();
   const user = localStorage.getItem('hh_user');
   if (!user) {
-    alert('Please login to share your feedback with us.');
+    await customAlert('Please login to share your feedback with us.', 'Login Required', '💬');
     window.location.href = 'login.html';
     return;
   }

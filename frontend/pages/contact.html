@@ -154,11 +154,11 @@
 
 <script src="../assets/js/app.js"></script>
 <script>
-function submitContact(e) {
+async function submitContact(e) {
   e.preventDefault();
   const user = localStorage.getItem('hh_user');
   if (!user) {
-    alert('Please login to send us a message.');
+    await customAlert('Please login to send us a message.', 'Login Required', '📩');
     window.location.href = 'login.html';
     return;
   }
