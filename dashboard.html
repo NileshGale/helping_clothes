@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Helping Hands</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>\
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🤝</div>
+    <span>Helping Hands</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="auth.html">Login / Sign Up</a></li>
+    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+    <li><a href="feedback.html">Feedback</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+    <li><a href="account.html">My Account</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleNav()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="dashboard-section">
+
+
+  <div class="dashboard-welcome">
+    <h2>Welcome Back, <span id="userName">Donor</span>! 👋</h2>
+    <p>Choose a donation category below to make a difference today.</p>
+  </div>
+
+  
+  <div style="display:flex;gap:16px;margin-bottom:32px;flex-wrap:wrap;">
+    <div style="background:white;border-radius:12px;padding:16px 24px;border:1.5px solid var(--border);flex:1;min-width:160px;text-align:center;">
+      <div style="font-size:1.6rem;font-weight:700;color:var(--primary);font-family:'Playfair Display',serif;" id="donationCount">0</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:2px;">My Donations</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:16px 24px;border:1.5px solid var(--border);flex:1;min-width:160px;text-align:center;">
+      <div style="font-size:1.6rem;font-weight:700;color:#2ecc71;font-family:'Playfair Display',serif;">Active</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:2px;">Account Status</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:16px 24px;border:1.5px solid var(--border);flex:1;min-width:160px;text-align:center;">
+      <div style="font-size:1.6rem;font-weight:700;color:var(--secondary);font-family:'Playfair Display',serif;">⭐ 4.9</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:2px;">Donor Rating</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px;">
+    <div class="section-tag">Choose a Category</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--secondary);margin-top:8px;">What Would You Like to Donate?</h2>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dash-card" onclick="openModal('clothes')">
+      <div class="dash-card-badge">Available</div>
+      <span class="card-emoji">👕</span>
+      <h3>Clothes</h3>
+      <p>Donate shirts, trousers, dresses, jackets, and more for families in need.</p>
+      <span class="btn btn-primary" style="padding:10px 24px;font-size:0.88rem;">Donate Clothes →</span>
+    </div>
+
+    <div class="dash-card" onclick="openModal('stationery')">
+      <div class="dash-card-badge">Available</div>
+      <span class="card-emoji">📚</span>
+      <h3>Stationery</h3>
+      <p>Books, pens, notebooks, and school supplies for underprivileged children.</p>
+      <span class="btn btn-secondary" style="padding:10px 24px;font-size:0.88rem;">Donate Stationery →</span>
+    </div>
+
+    <div class="dash-card" onclick="openModal('toys')">
+      <div class="dash-card-badge">Available</div>
+      <span class="card-emoji">🧸</span>
+      <h3>Toys</h3>
+      <p>Give children the joy of play. Donate gently used toys and games.</p>
+      <span class="btn" style="background:#e8f5e9;color:#2a5c45;padding:10px 24px;font-size:0.88rem;border-radius:50px;font-weight:600;">Donate Toys →</span>
+    </div>
+
+    <div class="dash-card" onclick="openModal('charity')">
+      <div class="dash-card-badge">Available</div>
+      <span class="card-emoji">❤️</span>
+      <h3>Charity</h3>
+      <p>General donations — household items, appliances, food parcels, and more.</p>
+      <span class="btn" style="background:#fce4ec;color:#c0392b;padding:10px 24px;font-size:0.88rem;border-radius:50px;font-weight:600;">Donate Now →</span>
+    </div>
+  </div>
+
+  <div style="margin-top:48px;">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--secondary);margin-bottom:16px;">📋 Recent Donations</h3>
+    <div id="historyList" style="background:white;border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;">
+      <div id="emptyHistory" style="padding:40px;text-align:center;color:var(--text-muted);">
+        <div style="font-size:3rem;margin-bottom:12px;">📦</div>
+        <p>No donations yet. Make your first donation above!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="clothesModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('clothes')">✕</button>
+    <div class="modal-header">
+      <span class="modal-emoji">👕</span>
+      <h3>Donate Clothes</h3>
+      <p>Fill in the details below and we'll arrange a pickup.</p>
+    </div>
+    <form onsubmit="submitDonation(event,'clothes')">
+      <div class="form-group">
+        <label>Upload Photo of Items</label>
+        <label class="file-label" for="clothesImg">
+          <span>📷</span>
+          <span id="clothesImgName">Click to select image from gallery</span>
+        </label>
+        <input type="file" id="clothesImg" accept="image/*" onchange="updateFileName('clothesImg','clothesImgName')"/>
+      </div>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Full name" required/>
+      </div>
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="tel" placeholder="10-digit mobile number" pattern="[0-9]{10}" required/>
+      </div>
+      <div class="form-group">
+        <label>Pickup Address</label>
+        <textarea placeholder="Full address with landmark and pincode" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Item Description</label>
+        <input type="text" placeholder="e.g. 5 shirts, 3 pants, 2 jackets"/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Submit Donation 🎁</button>
+    </form>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="stationeryModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('stationery')">✕</button>
+    <div class="modal-header">
+      <span class="modal-emoji">📚</span>
+      <h3>Donate Stationery</h3>
+      <p>Help a child learn — donate books, pens, and supplies.</p>
+    </div>
+    <form onsubmit="submitDonation(event,'stationery')">
+      <div class="form-group">
+        <label>Upload Photo of Items</label>
+        <label class="file-label" for="stationeryImg">
+          <span>📷</span>
+          <span id="stationeryImgName">Click to select image from gallery</span>
+        </label>
+        <input type="file" id="stationeryImg" accept="image/*" onchange="updateFileName('stationeryImg','stationeryImgName')"/>
+      </div>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Full name" required/>
+      </div>
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="tel" placeholder="10-digit mobile number" pattern="[0-9]{10}" required/>
+      </div>
+      <div class="form-group">
+        <label>Pickup Address</label>
+        <textarea placeholder="Full address with landmark and pincode" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Item Description</label>
+        <input type="text" placeholder="e.g. 10 notebooks, 5 textbooks, pens"/>
+      </div>
+      <button type="submit" class="btn btn-secondary btn-full">Submit Donation 🎁</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="toysModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('toys')">✕</button>
+    <div class="modal-header">
+      <span class="modal-emoji">🧸</span>
+      <h3>Donate Toys</h3>
+      <p>Bring smiles to children — donate gently used toys.</p>
+    </div>
+    <form onsubmit="submitDonation(event,'toys')">
+      <div class="form-group">
+        <label>Upload Photo of Items</label>
+        <label class="file-label" for="toysImg">
+          <span>📷</span>
+          <span id="toysImgName">Click to select image from gallery</span>
+        </label>
+        <input type="file" id="toysImg" accept="image/*" onchange="updateFileName('toysImg','toysImgName')"/>
+      </div>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Full name" required/>
+      </div>
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="tel" placeholder="10-digit mobile number" pattern="[0-9]{10}" required/>
+      </div>
+      <div class="form-group">
+        <label>Pickup Address</label>
+        <textarea placeholder="Full address with landmark and pincode" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Item Description</label>
+        <input type="text" placeholder="e.g. Lego set, board games, stuffed animals"/>
+      </div>
+      <button type="submit" class="btn btn-full" style="background:#2ecc71;color:white;border:none;">Submit Donation 🎁</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="charityModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('charity')">✕</button>
+    <div class="modal-header">
+      <span class="modal-emoji">❤️</span>
+      <h3>General Charity Donation</h3>
+      <p> donate and spread kindness to those who need it most.</p>
+    </div>
+    <form onsubmit="submitDonation(event,'charity')">
+      <div class="form-group">
+        <label>Upload Photo of Items</label>
+        <label class="file-label" for="charityImg">
+          <span>📷</span>
+          <span id="charityImgName">Click to select image from gallery</span>
+        </label>
+        <input type="file" id="charityImg" accept="image/*" onchange="updateFileName('charityImg','charityImgName')"/>
+      </div>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Full name" required/>
+      </div>
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="tel" placeholder="10-digit mobile number" pattern="[0-9]{10}" required/>
+      </div>
+      <div class="form-group">
+        <label>Pickup Address</label>
+        <textarea placeholder="Full address with landmark and pincode" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Item Description</label>
+        <input type="text" placeholder="Describe the items you're donating"/>
+      </div>
+      <button type="submit" class="btn btn-full" style="background:#e84a5f;color:white;border:none;">Submit Donation ❤️</button>
+    </form>
+  </div>
+</div>
+
+<div class="success-popup" id="successPopup">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <h3>Submitted Successfully!</h3>
+    <p>Thank you for your generous donation! Our team will contact you within 24 hours to schedule a pickup.</p>
+    <button class="btn btn-primary" onclick="closeSuccessPopup()">Wonderful! 🎉</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+
+window.addEventListener('DOMContentLoaded', () => {
+  const user = JSON.parse(localStorage.getItem('hh_user') || '{}');
+  if (user.name) document.getElementById('userName').textContent = user.name;
+  const count = JSON.parse(localStorage.getItem('hh_donations') || '[]').length;
+  document.getElementById('donationCount').textContent = count;
+  renderHistory();
+});
+
+function openModal(type) {
+  document.getElementById(type + 'Modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(type) {
+  document.getElementById(type + 'Modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function updateFileName(inputId, labelId) {
+  const file = document.getElementById(inputId).files[0];
+  if (file) document.getElementById(labelId).textContent = '✅ ' + file.name;
+}
+
+async function submitDonation(e, type) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const formData = new FormData();
+  
+  const user = JSON.parse(localStorage.getItem('hh_user') || '{"id":1}');
+  formData.append('user_id', user.id || 1);
+  formData.append('category', type);
+  formData.append('name', form.querySelector('input[type="text"]').value);
+  formData.append('mobile', form.querySelector('input[type="tel"]').value);
+  formData.append('address', form.querySelector('textarea').value);
+  formData.append('description', form.querySelector('input[placeholder*="e.g."], input[placeholder*="Describe"]').value);
+  
+  const fileInput = form.querySelector('input[type="file"]');
+  if (fileInput.files[0]) {
+    formData.append('image', fileInput.files[0]);
+  }
+
+  const btn = form.querySelector('button[type="submit"]');
+  const oldText = btn.textContent;
+  btn.textContent = 'Submitting... ⏳';
+  btn.disabled = true;
+
+  try {
+    const response = await fetch('donate.php', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      closeModal(type);
+      form.reset();
+      document.getElementById(type + 'ImgName').textContent = 'Click to select image from gallery';
+      renderHistory();
+      document.getElementById('successPopup').classList.add('active');
+    } else {
+      alert('Error: ' + result.message);
+    }
+  } catch (error) {
+    console.error('Donation error:', error);
+    alert('Failed to submit donation. Please try again.');
+  } finally {
+    btn.textContent = oldText;
+    btn.disabled = false;
+  }
+}
+
+function closeSuccessPopup() {
+  document.getElementById('successPopup').classList.remove('active');
+}
+
+async function renderHistory() {
+  const user = JSON.parse(localStorage.getItem('hh_user') || '{"id":1}');
+  const list = document.getElementById('historyList');
+  const empty = document.getElementById('emptyHistory');
+
+  try {
+    const response = await fetch(`get_donations.php?user_id=${user.id || 1}`);
+    const result = await response.json();
+    
+    if (result.success && result.donations.length > 0) {
+      empty.style.display = 'none';
+      document.getElementById('donationCount').textContent = result.donations.length;
+      
+      const icons = { clothes:'👕', stationery:'📚', toys:'🧸', charity:'❤️' };
+      const rows = result.donations.map(d => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.5rem;">${icons[d.category]||'📦'}</span>
+            <div>
+              <strong style="text-transform:capitalize;">${d.category} Donation</strong>
+              <div style="font-size:0.82rem;color:var(--text-muted);">${new Date(d.created_at).toLocaleDateString('en-IN')}</div>
+            </div>
+          </div>
+          <span style="background:var(--primary-light);color:var(--primary);padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;text-transform:capitalize;">${d.status.replace('_',' ')}</span>
+        </div>
+      `).join('');
+      list.innerHTML = rows;
+    } else {
+      empty.style.display = 'block';
+      list.innerHTML = '';
+      document.getElementById('donationCount').textContent = '0';
+    }
+  } catch (error) {
+    console.error('Fetch history error:', error);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+});
+</script>
+</body>
+</html>

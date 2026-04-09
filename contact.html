@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us — Helping Hands</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🤝</div>
+    <span>Helping Hands</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="auth.html">Login / Sign Up</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="feedback.html">Feedback</a></li>
+    <li><a href="contact.html" class="active">Contact Us</a></li>
+    <li><a href="account.html">My Account</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleNav()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <h1>Contact Us 📩</h1>
+  <p>We're here to help — reach out anytime</p>
+</div>
+
+<div class="contact-section" style="padding-top:50px;">
+  <div class="contact-grid">
+
+  
+    <div class="contact-info">
+      <h3>Get in Touch</h3>
+      <p style="color:var(--text-muted);font-size:0.93rem;line-height:1.7;margin-bottom:28px;">
+        Have questions about donating or receiving aid? Our team is here to help. Reach out and we'll get back to you within 24 hours.
+      </p>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">📧</div>
+        <div>
+          <strong>Admin Email</strong>
+          <span>admin@helpinghands.org</span>
+          <span style="display:block;color:var(--text-muted);font-size:0.82rem;margin-top:1px;">support@helpinghands.org</span>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <div>
+          <strong>Contact Numbers</strong>
+          <span>+91 98765 43210</span>
+          <span style="display:block;color:var(--text-muted);font-size:0.82rem;margin-top:1px;">+91 91234 56789 (Helpline)</span>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <div>
+          <strong>Working Hours</strong>
+          <span>Mon – Sat: 9:00 AM – 6:00 PM</span>
+          <span style="display:block;color:var(--text-muted);font-size:0.82rem;margin-top:1px;">Sunday: 10:00 AM – 2:00 PM</span>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div>
+          <strong>Office Address</strong>
+          <span>Helping Hands,</span>
+          <span style="display:block;color:var(--text-muted);font-size:0.82rem;">jaitala nagpur  maharashtra 440036</span>
+        </div>
+      </div>
+
+      
+      <div style="margin-top:32px;">
+        <p style="font-size:0.88rem;font-weight:600;color:var(--secondary);margin-bottom:12px;">Follow Us</p>
+        <div style="display:flex;gap:10px;">
+          <a href="#" style="width:40px;height:40px;background:var(--primary-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;text-decoration:none;">📘</a>
+          <a href="#" style="width:40px;height:40px;background:var(--primary-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;text-decoration:none;">📸</a>
+          <a href="#" style="width:40px;height:40px;background:var(--primary-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;text-decoration:none;">🐦</a>
+          <a href="#" style="width:40px;height:40px;background:var(--primary-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;text-decoration:none;">▶️</a>
+        </div>
+      </div>
+
+    
+      <div style="margin-top:28px;background:var(--bg2);border-radius:14px;padding:40px;text-align:center;border:1.5px dashed var(--border);">
+        <div style="font-size:3rem;margin-bottom:8px;">🗺️</div>
+        <p style="color:var(--text-muted);font-size:0.88rem;">jaitala nagpur  maharashtra 440036</p>
+        <a href="https://maps.google.com" target="_blank" class="btn btn-primary" style="margin-top:12px;padding:10px 20px;font-size:0.85rem;">Open in Maps</a>
+      </div>
+    </div>
+
+    
+    <div class="contact-form">
+      <h3>Send Us a Message</h3>
+      <form onsubmit="submitContact(event)">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="Full name" required/>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@example.com" required/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number (Optional)</label>
+          <input type="tel" placeholder="+91 XXXXX XXXXX"/>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select>
+            <option>General Inquiry</option>
+            <option>Donation Pickup Issue</option>
+            <option>Account Help</option>
+            <option>Volunteer With Us</option>
+            <option>Partnership Opportunity</option>
+            <option>Media / Press</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Your Message</label>
+          <textarea placeholder="Describe your query or message here..." style="min-height:130px;" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Send Message 📤</button>
+      </form>
+
+      <div style="margin-top:20px;background:var(--primary-light);border-radius:12px;padding:16px 20px;display:flex;gap:10px;align-items:center;">
+        <span style="font-size:1.4rem;">⚡</span>
+        <p style="font-size:0.88rem;color:var(--primary-dark);line-height:1.5;">We typically respond within <strong>24 hours</strong> on business days.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="max-width:800px;margin:0 auto;padding:0 40px 80px;">
+  <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--secondary);margin-bottom:24px;text-align:center;">Frequently Asked Questions</h2>
+  <div id="faqList"></div>
+</div>
+
+<div class="success-popup" id="successPopup">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <h3>Message Sent!</h3>
+    <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
+    <button class="btn btn-primary" onclick="document.getElementById('successPopup').classList.remove('active')">Got it!</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+function submitContact(e) {
+  e.preventDefault();
+  document.getElementById('successPopup').classList.add('active');
+  e.target.reset();
+}
+
+const faqs = [
+  { q: "How do I schedule a pickup?", a: "After submitting your donation form, our team will contact you within 24 hours to schedule a convenient pickup time." },
+  { q: "What items can I donate?", a: "We accept clothes, toys, stationery, books, and general household items. All items should be in usable condition." },
+  { q: "Is there a minimum quantity required?", a: "No minimum! Even a single item is welcome. Every donation makes a difference." },
+  { q: "How do I know my donation reached someone?", a: "We send you a confirmation message with impact updates once your items are distributed." },
+];
+
+document.getElementById('faqList').innerHTML = faqs.map((f,i) => `
+  <div style="background:white;border-radius:12px;margin-bottom:12px;border:1.5px solid var(--border);overflow:hidden;">
+    <button onclick="toggleFaq(${i})" style="width:100%;text-align:left;padding:18px 20px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;color:var(--secondary);display:flex;justify-content:space-between;align-items:center;">
+      ${f.q}
+      <span id="faqIcon${i}" style="font-size:1.2rem;transition:transform 0.2s;">+</span>
+    </button>
+    <div id="faqAns${i}" style="display:none;padding:0 20px 16px;color:var(--text-muted);font-size:0.9rem;line-height:1.7;">${f.a}</div>
+  </div>
+`).join('');
+
+function toggleFaq(i) {
+  const ans = document.getElementById('faqAns' + i);
+  const icon = document.getElementById('faqIcon' + i);
+  const isOpen = ans.style.display === 'block';
+  ans.style.display = isOpen ? 'none' : 'block';
+  icon.textContent = isOpen ? '+' : '−';
+}
+</script>
+</body>
+</html>

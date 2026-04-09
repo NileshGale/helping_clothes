@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Helping Hands — Donate with Heart</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🤝</div>
+    <span>Helping Hands</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="auth.html" class="btn-nav">Login / Sign Up</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="feedback.html">Feedback</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+    <li><a href="account.html">My Account</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleNav()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span>💛</span> Spreading Joy, One Donation at a Time
+    </div>
+    <h1>Give What You Don't Need,<br/><span>Change Someone's</span> World</h1>
+    <p>Helping Hands connects generous donors with people in need. Donate your unused clothes, toys, stationery and more — we'll make sure they reach those who need them most.</p>
+    <div class="hero-btns">
+      <a href="auth.html" class="btn btn-primary">🎁 Start Donating</a>
+      <a href="#categories" class="btn btn-outline">Learn More</a>
+    </div>
+  </div>
+</section>
+
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="num">12,400+</div>
+      <div class="label">Items Donated</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">3,200+</div>
+      <div class="label">Families Helped</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">58</div>
+      <div class="label">Cities Covered</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">6,500+</div>
+      <div class="label">Happy Donors</div>
+    </div>
+  </div>
+</div>
+
+
+<section id="about">
+  <div class="section-header">
+    <div class="section-tag">About Us</div>
+    <h2>Why Helping Hands?</h2>
+    <p>We believe every unused item in your home can create happiness elsewhere. Our platform makes donating simple, transparent, and impactful.</p>
+  </div>
+  <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;">
+    <div>
+      <p style="color:var(--text-muted);line-height:1.9;font-size:1.05rem;margin-bottom:16px;">
+        Every year, millions of clothes, toys, and books go unused while countless families struggle to afford basic necessities. <strong>Helping Hands</strong> bridges this gap.
+      </p>
+      <p style="color:var(--text-muted);line-height:1.9;font-size:1.05rem;margin-bottom:24px;">
+        We provide a seamless platform to donate your gently used items. Just fill out a form, upload a photo, and our volunteer team will pick up the items from your doorstep.
+      </p>
+      <a href="auth.html" class="btn btn-primary">Join Us Today →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div style="background:var(--primary-light);border-radius:14px;padding:20px;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:8px;">👕</div>
+        <strong style="color:var(--secondary);font-size:0.9rem;">Clothes</strong>
+      </div>
+      <div style="background:#e8f5e9;border-radius:14px;padding:20px;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:8px;">🧸</div>
+        <strong style="color:var(--secondary);font-size:0.9rem;">Toys</strong>
+      </div>
+      <div style="background:#e3f2fd;border-radius:14px;padding:20px;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:8px;">📚</div>
+        <strong style="color:var(--secondary);font-size:0.9rem;">Stationery</strong>
+      </div>
+      <div style="background:#fce4ec;border-radius:14px;padding:20px;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:8px;">❤️</div>
+        <strong style="color:var(--secondary);font-size:0.9rem;">Charity</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section">
+  <div class="section-header">
+    <div class="section-tag">Gallery</div>
+    <h2>Donations That Make a Difference</h2>
+    <p>Every item you donate finds a new purpose and brings joy to someone in need.</p>
+  </div>
+  <div class="photo-mosaic">
+    <div class="photo-cell span-2">
+      <div class="photo-bg charity">
+        <span>❤️</span>
+        <span style="font-size:1.1rem;color:rgba(255,255,255,0.9);">Charity Drive</span>
+      </div>
+      <div class="photo-label">Community Charity</div>
+    </div>
+    <div class="photo-cell">
+      <div class="photo-bg clothes"><span>👕</span></div>
+      <div class="photo-label">Clothes Donation</div>
+    </div>
+    <div class="photo-cell">
+      <div class="photo-bg toys"><span>🧸</span></div>
+      <div class="photo-label">Toy Drive</div>
+    </div>
+    <div class="photo-cell">
+      <div class="photo-bg books"><span>📚</span></div>
+      <div class="photo-label">Stationery</div>
+    </div>
+    <div class="photo-cell">
+      <div class="photo-bg food"><span>🍱</span></div>
+      <div class="photo-label">Food Aid</div>
+    </div>
+    <div class="photo-cell">
+      <div class="photo-bg care"><span>🩺</span></div>
+      <div class="photo-label">Health Care</div>
+    </div>
+  </div>
+</section>
+
+
+<section id="categories" class="categories">
+  <div class="section-header">
+    <div class="section-tag">Donation Categories</div>
+    <h2>What Can You Donate?</h2>
+    <p>Choose a category and make a difference today. Every item matters.</p>
+  </div>
+  <div class="cards-grid">
+    <div class="cat-card">
+      <span class="cat-icon">👕</span>
+      <h3>Clothes</h3>
+      <p>Donate gently used clothes — shirts, trousers, jackets, and children's wear for families in need.</p>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🧸</span>
+      <h3>Toys</h3>
+      <p>Let your old toys bring smiles to underprivileged children who deserve to play and grow.</p>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">📚</span>
+      <h3>Stationery</h3>
+      <p>Books, pens, notebooks and more — help a child get the education they deserve.</p>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">❤️</span>
+      <h3>Charity</h3>
+      <p>General donations and household items — everything finds a purpose and a grateful home.</p>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="section-header">
+    <div class="section-tag">How It Works</div>
+    <h2>Donate in 4 Simple Steps</h2>
+    <p>We've made donating as easy as possible. Here's how to get started.</p>
+  </div>
+  <div class="how-steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Sign Up</h3>
+      <p>Create your free account in under a minute.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Choose Category</h3>
+      <p>Pick what you'd like to donate from our categories.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Fill the Form</h3>
+      <p>Upload a photo and provide your pickup address.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>We Pick Up</h3>
+      <p>Our team collects the items and delivers them to those in need.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="testimonials">
+  <div class="section-header">
+    <div class="section-tag">Testimonials</div>
+    <h2>Voices of Our Community</h2>
+    <p>Hear from donors who've made a real difference.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p>"I donated my kids' old clothes and toys through Helping Hands. The process was so smooth and I got a thank-you note from the recipient family. Truly heartwarming!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#e8650a;">P</div>
+        <div><strong>Priya Sharma</strong><span>Mumbai, India</span></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p>"The pickup was prompt and the team was very professional. I've been donating every quarter now. This platform has made giving back so convenient!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#f5c842;color:#333;">R</div>
+        <div><strong>Rahul Verma</strong><span>Delhi, India</span></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p>"I donated stationery and books for underprivileged kids. Seeing the impact through photos they shared was the most rewarding experience of my year."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#2a5c45;">A</div>
+        <div><strong>Ananya Iyer</strong><span>Bengaluru, India</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section style="background:var(--primary);padding:70px 40px;text-align:center;">
+  <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);color:white;margin-bottom:14px;">Ready to Make a Difference?</h2>
+  <p style="color:rgba(255,255,255,0.8);font-size:1.1rem;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;margin-bottom:32px;">Join thousands of donors and start giving today. It takes less than 5 minutes.</p>
+  <a href="auth.html" class="btn" style="background:white;color:var(--primary);font-weight:700;font-size:1.05rem;padding:16px 40px;">Get Started Free 🎁</a>
+</section>
+
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🤝</div>
+        <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:white;font-weight:700;">Helping Hands</span>
+      </div>
+      <p>Bridging the gap between generosity and need — one donation at a time.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="auth.html">Login / Sign Up</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="feedback.html">Feedback</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="account.html">My Account</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Twitter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Helping Hands. Made with ❤️ for a better world.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

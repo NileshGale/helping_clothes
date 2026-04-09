@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Account — Helping Hands</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🤝</div>
+    <span>Helping Hands</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="auth.html">Login / Sign Up</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="feedback.html">Feedback</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+    <li><a href="account.html" class="active">My Account</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleNav()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="account-section">
+  <div class="account-header">
+    <h2>My Account ⚙️</h2>
+    <p>Manage your profile and account settings</p>
+  </div>
+
+  <div class="account-box">
+
+
+    <div class="profile-upload">
+      <div class="profile-pic" onclick="document.getElementById('profileImgInput').click()" id="profilePicWrap">
+        <img id="profilePicImg" src="" alt="" style="display:none;"/>
+        <span id="profilePicEmoji">👤</span>
+      </div>
+      <p class="hint">Click to upload profile photo</p>
+      <input type="file" id="profileImgInput" accept="image/*" onchange="loadProfilePic()" style="display:none;"/>
+    </div>
+
+  
+    <div style="display:flex;gap:16px;margin-bottom:32px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:100px;background:var(--primary-light);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:700;color:var(--primary);font-family:'Playfair Display',serif;" id="acctDonations">0</div>
+        <div style="font-size:0.78rem;color:var(--primary-dark);">Donations</div>
+      </div>
+      <div style="flex:1;min-width:100px;background:#e8f5e9;border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:700;color:#2a5c45;font-family:'Playfair Display',serif;">Active</div>
+        <div style="font-size:0.78rem;color:#2a5c45;">Status</div>
+      </div>
+      <div style="flex:1;min-width:100px;background:#fff8e1;border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:700;color:#f5c842;font-family:'Playfair Display',serif;">⭐</div>
+        <div style="font-size:0.78rem;color:#b8860b;">Top Donor</div>
+      </div>
+    </div>
+
+    <div id="saveAlert" class="alert success" style="display:none;">✅ Profile updated successfully!</div>
+    <div id="saveError" class="alert error" style="display:none;"></div>
+
+    <form onsubmit="saveAccount(event)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="accFirstName" placeholder="First name"/>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="accLastName" placeholder="Last name"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="accEmail" placeholder="you@example.com" required/>
+      </div>
+
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="tel" id="accMobile" placeholder="+91 XXXXX XXXXX"/>
+      </div>
+
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" id="accCity" placeholder="Your city"/>
+      </div>
+
+      <div class="form-group">
+        <label>About Me / Bio</label>
+        <textarea id="accBio" placeholder="Tell us a bit about yourself and why you donate..." style="min-height:100px;"></textarea>
+      </div>
+
+      <div style="background:var(--bg2);border-radius:12px;padding:20px;margin-bottom:20px;">
+        <h4 style="color:var(--secondary);font-size:0.92rem;font-weight:600;margin-bottom:14px;">🔒 Change Password</h4>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label>Current Password</label>
+          <input type="password" placeholder="Enter current password"/>
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label>New Password</label>
+          <input type="password" id="newPass" placeholder="Min. 8 characters" minlength="8"/>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Confirm New Password</label>
+          <input type="password" id="confirmPass" placeholder="Re-enter new password"/>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn btn-primary" style="flex:1;justify-content:center;">Save Changes ✓</button>
+        <button type="button" class="btn-danger" onclick="handleLogout()">🚪 Logout</button>
+      </div>
+    </form>
+  </div>
+
+  <div style="background:white;border-radius:var(--radius);padding:28px;border:1.5px solid #fcd0d0;margin-top:20px;">
+    <h4 style="color:#c0392b;font-size:1rem;margin-bottom:8px;">⚠️ Danger Zone</h4>
+    <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:16px;line-height:1.6;">Deleting your account is permanent and cannot be undone. All your donation history will be lost.</p>
+    <button onclick="confirmDelete()" style="background:none;border:1.5px solid #e84a5f;color:#e84a5f;padding:10px 20px;border-radius:30px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;transition:all 0.2s;" onmouseover="this.style.background='#e84a5f';this.style.color='white'" onmouseout="this.style.background='none';this.style.color='#e84a5f'">Delete My Account</button>
+  </div>
+</div>
+
+<div class="success-popup" id="logoutPopup">
+  <div class="success-box">
+    <div class="success-icon" style="background:linear-gradient(135deg,var(--secondary),var(--secondary-light));">👋</div>
+    <h3>Logged Out</h3>
+    <p>You've been successfully logged out. Thank you for making a difference!</p>
+    <a href="index.html" class="btn btn-primary">Back to Home</a>
+  </div>
+</div>
+
+<div class="success-popup" id="savePopup">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <h3>Profile Updated!</h3>
+    <p>Your account details have been saved successfully.</p>
+    <button class="btn btn-primary" onclick="document.getElementById('savePopup').classList.remove('active')">Great!</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const user = JSON.parse(localStorage.getItem('hh_user') || '{}');
+  if (user.name) {
+    const parts = user.name.split(' ');
+    document.getElementById('accFirstName').value = parts[0] || '';
+    document.getElementById('accLastName').value = parts.slice(1).join(' ') || '';
+  }
+  if (user.email) document.getElementById('accEmail').value = user.email;
+  if (user.mobile) document.getElementById('accMobile').value = user.mobile;
+  if (user.bio) document.getElementById('accBio').value = user.bio;
+  if (user.city) document.getElementById('accCity').value = user.city;
+  if (user.profilePic) {
+    document.getElementById('profilePicImg').src = user.profilePic;
+    document.getElementById('profilePicImg').style.display = 'block';
+    document.getElementById('profilePicEmoji').style.display = 'none';
+  }
+  const count = JSON.parse(localStorage.getItem('hh_donations') || '[]').length;
+  document.getElementById('acctDonations').textContent = count;
+});
+
+function loadProfilePic() {
+  const file = document.getElementById('profileImgInput').files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('profilePicImg').src = e.target.result;
+    document.getElementById('profilePicImg').style.display = 'block';
+    document.getElementById('profilePicEmoji').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveAccount(e) {
+  e.preventDefault();
+  const newPass = document.getElementById('newPass').value;
+  const confirmPass = document.getElementById('confirmPass').value;
+  if (newPass && newPass !== confirmPass) {
+    const err = document.getElementById('saveError');
+    err.textContent = 'New passwords do not match!';
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 3000);
+    return;
+  }
+
+  const user = JSON.parse(localStorage.getItem('hh_user') || '{}');
+  user.name = (document.getElementById('accFirstName').value + ' ' + document.getElementById('accLastName').value).trim();
+  user.email = document.getElementById('accEmail').value;
+  user.mobile = document.getElementById('accMobile').value;
+  user.bio = document.getElementById('accBio').value;
+  user.city = document.getElementById('accCity').value;
+  const pic = document.getElementById('profilePicImg').src;
+  if (pic) user.profilePic = pic;
+  localStorage.setItem('hh_user', JSON.stringify(user));
+  document.getElementById('savePopup').classList.add('active');
+}
+
+function handleLogout() {
+  localStorage.removeItem('hh_user');
+  document.getElementById('logoutPopup').classList.add('active');
+}
+
+function confirmDelete() {
+  if (confirm('Are you absolutely sure you want to delete your account? This cannot be undone.')) {
+    localStorage.clear();
+    alert('Account deleted. Redirecting to homepage.');
+    window.location.href = 'index.html';
+  }
+}
+</script>
+</body>
+</html>
