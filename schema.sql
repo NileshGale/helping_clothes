@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS helping_hands
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
-USE helping_hands
+USE helping_hands;
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
@@ -16,11 +16,21 @@ CREATE TABLE IF NOT EXISTS users (
   bio         TEXT,
   city        VARCHAR(100),
   profile_pic VARCHAR(300),
-  is_active   TINYINT(1)          NOT NULL DEFAULT 1,
+  is_active   TINYINT(1)          NOT NULL DEFAULT 0,
   created_at  DATETIME            NOT NULL,
   updated_at  DATETIME            ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_email (email)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS email_verifications (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id     INT UNSIGNED NOT NULL,
+  otp_code    VARCHAR(6)   NOT NULL,
+  expires_at  DATETIME     NOT NULL,
+  created_at  DATETIME     NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 
 CREATE TABLE IF NOT EXISTS donations (
   id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

@@ -9,9 +9,7 @@ function toggleNav() {
 function protectPage() {
   const user = localStorage.getItem('hh_user');
   const path = window.location.pathname;
-  const isPrivatePage = path.includes('account.html') || 
-                        path.includes('feedback.html') || 
-                        path.includes('contact.html');
+  const isPrivatePage = path.includes('account.html');
   
   if (!user && isPrivatePage) {
     window.location.href = 'login.html';

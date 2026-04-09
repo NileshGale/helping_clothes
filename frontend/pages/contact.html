@@ -156,6 +156,12 @@
 <script>
 function submitContact(e) {
   e.preventDefault();
+  const user = localStorage.getItem('hh_user');
+  if (!user) {
+    alert('Please login to send us a message.');
+    window.location.href = 'login.html';
+    return;
+  }
   document.getElementById('successPopup').classList.add('active');
   e.target.reset();
 }

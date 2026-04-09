@@ -151,6 +151,12 @@ function setRating(val) {
 
 function submitFeedback(e) {
   e.preventDefault();
+  const user = localStorage.getItem('hh_user');
+  if (!user) {
+    alert('Please login to share your feedback with us.');
+    window.location.href = 'login.html';
+    return;
+  }
   document.getElementById('successPopup').classList.add('active');
   e.target.reset();
   setRating(5);
