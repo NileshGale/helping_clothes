@@ -13,14 +13,7 @@
     <div class="logo-icon">🤝</div>
     <span>Helping Hands</span>
   </a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="login.html" class="btn-nav">Login</a></li><li><a href="signup.html">Sign Up</a></li>
-    <li><a href="dashboard.html">Dashboard</a></li>
-    <li><a href="feedback.html">Feedback</a></li>
-    <li><a href="contact.html">Contact Us</a></li>
-    <li><a href="account.html" class="active">My Account</a></li>
-  </ul>
+  <ul class="nav-links" id="navLinks"></ul>
   <div class="hamburger" onclick="toggleNav()" id="hamburger">
     <span></span><span></span><span></span>
   </div>
@@ -32,97 +25,117 @@
     <p>Manage your profile and account settings</p>
   </div>
 
-  <div class="account-box">
-
-
-    <div class="profile-upload">
-      <div class="profile-pic" onclick="document.getElementById('profileImgInput').click()" id="profilePicWrap">
-        <img id="profilePicImg" src="" alt="" style="display:none;"/>
-        <span id="profilePicEmoji">👤</span>
-      </div>
-      <p class="hint">Click to upload profile photo</p>
-      <input type="file" id="profileImgInput" accept="image/*" onchange="loadProfilePic()" style="display:none;"/>
+  <div class="account-box" style="padding:0; overflow:hidden;">
+    <!-- Account Tabs Navigation -->
+    <div class="auth-tabs" style="background:var(--bg2);">
+      <div class="auth-tab active" onclick="switchAccountTab('profile', this)">👤 Profile</div>
+      <div class="auth-tab" onclick="switchAccountTab('security', this)">🔒 Security</div>
+      <div class="auth-tab" onclick="switchAccountTab('actions', this)">⚙️ Actions</div>
     </div>
 
-  
-    <div style="display:flex;gap:16px;margin-bottom:32px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:100px;background:var(--primary-light);border-radius:10px;padding:14px;text-align:center;">
-        <div style="font-size:1.4rem;font-weight:700;color:var(--primary);font-family:'Playfair Display',serif;" id="acctDonations">0</div>
-        <div style="font-size:0.78rem;color:var(--primary-dark);">Donations</div>
-      </div>
-      <div style="flex:1;min-width:100px;background:#e8f5e9;border-radius:10px;padding:14px;text-align:center;">
-        <div style="font-size:1.4rem;font-weight:700;color:#2a5c45;font-family:'Playfair Display',serif;">Active</div>
-        <div style="font-size:0.78rem;color:#2a5c45;">Status</div>
-      </div>
-      <div style="flex:1;min-width:100px;background:#fff8e1;border-radius:10px;padding:14px;text-align:center;">
-        <div style="font-size:1.4rem;font-weight:700;color:#f5c842;font-family:'Playfair Display',serif;">⭐</div>
-        <div style="font-size:0.78rem;color:#b8860b;">Top Donor</div>
-      </div>
+    <div class="auth-form-wrap">
+      <div id="saveAlert" class="alert success" style="display:none;">✅ Profile updated successfully!</div>
+      <div id="saveError" class="alert error" style="display:none;"></div>
+
+      <form onsubmit="saveAccount(event)">
+        <!-- Tab: Profile -->
+        <div id="tab-profile" class="account-tab-content active">
+          <div class="profile-upload" style="margin-top:0;">
+            <div class="profile-pic" onclick="document.getElementById('profileImgInput').click()" id="profilePicWrap">
+              <img id="profilePicImg" src="" alt="" style="display:none;"/>
+              <span id="profilePicEmoji">👤</span>
+            </div>
+            <p class="hint">Click to upload photo</p>
+            <input type="file" id="profileImgInput" accept="image/*" onchange="loadProfilePic()" style="display:none;"/>
+          </div>
+
+          <div style="display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:100px;background:var(--primary-light);border-radius:10px;padding:12px;text-align:center;">
+              <div style="font-size:1.2rem;font-weight:700;color:var(--primary);" id="acctDonations">0</div>
+              <div style="font-size:0.7rem;color:var(--primary-dark);text-transform:uppercase;">Donations</div>
+            </div>
+            <div style="flex:1;min-width:100px;background:#e8f5e9;border-radius:10px;padding:12px;text-align:center;">
+              <div style="font-size:1.2rem;font-weight:700;color:#2a5c45;">Active</div>
+              <div style="font-size:0.7rem;color:#2a5c45;text-transform:uppercase;">Status</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="accFirstName" placeholder="First name"/>
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="accLastName" placeholder="Last name"/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="accEmail" placeholder="you@example.com" required/>
+          </div>
+
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input type="tel" id="accMobile" placeholder="+91 XXXXX XXXXX"/>
+          </div>
+
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" id="accCity" placeholder="Your city"/>
+          </div>
+
+          <div class="form-group">
+            <label>About Me / Bio</label>
+            <textarea id="accBio" placeholder="Tell us a bit about yourself..." style="min-height:80px;"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-full">Save Profile Updates ✓</button>
+        </div>
+
+        <!-- Tab: Security -->
+        <div id="tab-security" class="account-tab-content" style="display:none;">
+          <h4 style="color:var(--secondary); margin-bottom:16px;">Update Password</h4>
+          <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" id="oldPass" placeholder="Enter current password"/>
+          </div>
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" id="newPass" placeholder="Min. 8 characters" minlength="8"/>
+          </div>
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <input type="password" id="confirmPass" placeholder="Re-enter new password"/>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Update Password 🔒</button>
+        </div>
+
+        <!-- Tab: Actions -->
+        <div id="tab-actions" class="account-tab-content" style="display:none;">
+          <div style="text-align:center; padding:20px 0;">
+            <div style="font-size:3.5rem; margin-bottom:16px;">🚶‍♂️</div>
+            <h3 style="margin-bottom:8px;">Ready to go?</h3>
+            <p style="color:var(--text-muted); margin-bottom:24px;">You can log out safely and return anytime to continue your journey of giving.</p>
+            <button type="button" class="btn btn-primary btn-full" style="background:#e84a5f;" onclick="handleLogout()">Exit & Logout 🚪</button>
+          </div>
+
+          <div style="margin-top:40px; border-top:1.5px solid var(--border); padding-top:24px;">
+            <h4 style="color:#c0392b; font-size:0.9rem; margin-bottom:8px;">Danger Zone ⚠️</h4>
+            <p style="color:var(--text-muted); font-size:0.82rem; margin-bottom:12px;">Permanently delete your account and all donation history.</p>
+            <button type="button" onclick="confirmDelete()" style="background:none; border:1px solid #e84a5f; color:#e84a5f; padding:8px 16px; border-radius:20px; cursor:pointer; font-size:0.8rem; font-weight:600;">Delete My Account</button>
+          </div>
+        </div>
+      </form>
     </div>
-
-    <div id="saveAlert" class="alert success" style="display:none;">✅ Profile updated successfully!</div>
-    <div id="saveError" class="alert error" style="display:none;"></div>
-
-    <form onsubmit="saveAccount(event)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-        <div class="form-group">
-          <label>First Name</label>
-          <input type="text" id="accFirstName" placeholder="First name"/>
-        </div>
-        <div class="form-group">
-          <label>Last Name</label>
-          <input type="text" id="accLastName" placeholder="Last name"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="accEmail" placeholder="you@example.com" required/>
-      </div>
-
-      <div class="form-group">
-        <label>Mobile Number</label>
-        <input type="tel" id="accMobile" placeholder="+91 XXXXX XXXXX"/>
-      </div>
-
-      <div class="form-group">
-        <label>City</label>
-        <input type="text" id="accCity" placeholder="Your city"/>
-      </div>
-
-      <div class="form-group">
-        <label>About Me / Bio</label>
-        <textarea id="accBio" placeholder="Tell us a bit about yourself and why you donate..." style="min-height:100px;"></textarea>
-      </div>
-
-      <div style="background:var(--bg2);border-radius:12px;padding:20px;margin-bottom:20px;">
-        <h4 style="color:var(--secondary);font-size:0.92rem;font-weight:600;margin-bottom:14px;">🔒 Change Password</h4>
-        <div class="form-group" style="margin-bottom:12px;">
-          <label>Current Password</label>
-          <input type="password" placeholder="Enter current password"/>
-        </div>
-        <div class="form-group" style="margin-bottom:12px;">
-          <label>New Password</label>
-          <input type="password" id="newPass" placeholder="Min. 8 characters" minlength="8"/>
-        </div>
-        <div class="form-group" style="margin-bottom:0;">
-          <label>Confirm New Password</label>
-          <input type="password" id="confirmPass" placeholder="Re-enter new password"/>
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button type="submit" class="btn btn-primary" style="flex:1;justify-content:center;">Save Changes ✓</button>
-        <button type="button" class="btn-danger" onclick="handleLogout()">🚪 Logout</button>
-      </div>
-    </form>
   </div>
+</div>
 
-  <div style="background:white;border-radius:var(--radius);padding:28px;border:1.5px solid #fcd0d0;margin-top:20px;">
-    <h4 style="color:#c0392b;font-size:1rem;margin-bottom:8px;">⚠️ Danger Zone</h4>
-    <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:16px;line-height:1.6;">Deleting your account is permanent and cannot be undone. All your donation history will be lost.</p>
-    <button onclick="confirmDelete()" style="background:none;border:1.5px solid #e84a5f;color:#e84a5f;padding:10px 20px;border-radius:30px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;transition:all 0.2s;" onmouseover="this.style.background='#e84a5f';this.style.color='white'" onmouseout="this.style.background='none';this.style.color='#e84a5f'">Delete My Account</button>
-  </div>
+<style>
+  .account-tab-content { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+</style>
 </div>
 
 <div class="success-popup" id="logoutPopup">
@@ -165,6 +178,16 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('acctDonations').textContent = count;
 });
 
+function switchAccountTab(tab, el) {
+  // Update Buttons
+  document.querySelectorAll('.auth-tab').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+
+  // Update Content
+  document.querySelectorAll('.account-tab-content').forEach(c => c.style.display = 'none');
+  document.getElementById('tab-' + tab).style.display = 'block';
+}
+
 function loadProfilePic() {
   const file = document.getElementById('profileImgInput').files[0];
   if (!file) return;
@@ -177,28 +200,71 @@ function loadProfilePic() {
   reader.readAsDataURL(file);
 }
 
-function saveAccount(e) {
+async function saveAccount(e) {
   e.preventDefault();
+  
+  const user = JSON.parse(localStorage.getItem('hh_user') || '{}');
+  const oldPass = document.getElementById('oldPass').value;
   const newPass = document.getElementById('newPass').value;
   const confirmPass = document.getElementById('confirmPass').value;
+
+  // Client-side validation for password match
   if (newPass && newPass !== confirmPass) {
     const err = document.getElementById('saveError');
     err.textContent = 'New passwords do not match!';
     err.style.display = 'block';
-    setTimeout(() => err.style.display = 'none', 3000);
+    err.classList.add('show');
+    setTimeout(() => err.classList.remove('show'), 3000);
     return;
   }
 
-  const user = JSON.parse(localStorage.getItem('hh_user') || '{}');
-  user.name = (document.getElementById('accFirstName').value + ' ' + document.getElementById('accLastName').value).trim();
-  user.email = document.getElementById('accEmail').value;
-  user.mobile = document.getElementById('accMobile').value;
-  user.bio = document.getElementById('accBio').value;
-  user.city = document.getElementById('accCity').value;
-  const pic = document.getElementById('profilePicImg').src;
-  if (pic) user.profilePic = pic;
-  localStorage.setItem('hh_user', JSON.stringify(user));
-  document.getElementById('savePopup').classList.add('active');
+  const formData = {
+    user_id: user.id,
+    name: (document.getElementById('accFirstName').value + ' ' + document.getElementById('accLastName').value).trim(),
+    email: document.getElementById('accEmail').value,
+    mobile: document.getElementById('accMobile').value,
+    city: document.getElementById('accCity').value,
+    bio: document.getElementById('accBio').value,
+    old_password: oldPass,
+    new_password: newPass
+  };
+
+  try {
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    const response = await fetch('../../backend/api/update_account.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      // Sync local storage with updated server data
+      localStorage.setItem('hh_user', JSON.stringify(result.user));
+      document.getElementById('savePopup').classList.add('active');
+      
+      // Clear password fields
+      document.getElementById('oldPass').value = '';
+      document.getElementById('newPass').value = '';
+      document.getElementById('confirmPass').value = '';
+    } else {
+      const err = document.getElementById('saveError');
+      err.textContent = result.message;
+      err.style.display = 'block';
+      err.classList.add('show');
+      setTimeout(() => err.classList.remove('show'), 3000);
+    }
+  } catch (err) {
+    console.error(err);
+    customAlert('Failed to connect to server.', 'Error', '❌');
+  } finally {
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = false;
+    btn.textContent = 'Save Changes ✓';
+  }
 }
 
 // handleLogout now handled globally by app.js

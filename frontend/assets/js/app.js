@@ -24,39 +24,35 @@ function initNavbar() {
   const navLinks = document.getElementById('navLinks');
   if (!navLinks) return;
 
-  // Add Public Links that might be missing (Need Help, Impact)
-  const publicLinks = [
-    { href: 'need_help.html', text: 'Need Help' },
-    { href: 'impact.html', text: 'Impact' }
+  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+
+  // Define All Links and their visibility
+  const links = [
+    { href: 'index.html', text: 'Home', guest: true, private: true },
+    { href: 'dashboard.html', text: 'Dashboard', guest: false, private: true },
+    { href: 'need_help.html', text: 'Need Help', guest: true, private: true },
+    { href: 'impact.html', text: 'Impact', guest: true, private: true },
+    { href: 'feedback.html', text: 'Feedback', guest: true, private: true },
+    { href: 'contact.html', text: 'Contact Us', guest: true, private: true }
   ];
 
-  publicLinks.forEach(link => {
-    if (!navLinks.querySelector(`a[href="${link.href}"]`)) {
-      const li = document.createElement('li');
-      li.innerHTML = `<a href="${link.href}">${link.text}</a>`;
-      // Insert before Feedback/Contact if they exist, or just append
-      const feedbackLink = navLinks.querySelector('a[href="feedback.html"]');
-      if (feedbackLink) {
-        navLinks.insertBefore(li, feedbackLink.parentElement);
-      } else {
-        navLinks.appendChild(li);
-      }
-    }
-  });
-
+  // Add Auth specific links
   if (user) {
-    // Remove guest links
-    const guestLinks = navLinks.querySelectorAll('a[href="login.html"], a[href="signup.html"]');
-    guestLinks.forEach(link => link.parentElement.remove());
-
-    // Add private links
-    if (!navLinks.querySelector('a[href="dashboard.html"]')) {
-      const dashLi = document.createElement('li');
-      dashLi.innerHTML = `<a href="dashboard.html">Dashboard</a>`;
-      // Insert at the beginning or after Home
-      navLinks.insertBefore(dashLi, navLinks.firstChild.nextSibling); 
-    }
+    links.push({ href: 'account.html', text: 'My Account', guest: false, private: true });
+  } else {
+    links.push({ href: 'login.html', text: 'Login', guest: true, private: false, class: 'btn-nav' });
+    links.push({ href: 'signup.html', text: 'Sign Up', guest: true, private: false });
   }
+
+  // Build the HTML
+  navLinks.innerHTML = links
+    .filter(link => (user && link.private) || (!user && link.guest))
+    .map(link => {
+      const isActive = currentPath === link.href ? 'active' : '';
+      const extraClass = link.class || '';
+      return `<li><a href="${link.href}" class="${isActive} ${extraClass}">${link.text}</a></li>`;
+    })
+    .join('');
 }
 
 /**
@@ -119,13 +115,14 @@ window.customConfirm = (message, title = 'Confirm', icon = '❓') => {
   return showCustomModal({ title, message, icon, showCancel: true });
 };
 
-async function handleLogout() {
-  const confirmed = await customConfirm('Are you sure you want to logout?');
+window.handleLogout = async function() {
+  const confirmed = await customConfirm('Are you sure you want to logout?', 'Logout', '🚪');
   if (confirmed) {
     localStorage.removeItem('hh_user');
-    window.location.href = 'index.html';
+    sessionStorage.clear(); // Clear any pending OTP data or session flags
+    window.location.href = 'login.html';
   }
-}
+};
 
 document.addEventListener('click', (e) => {
   const nav = document.getElementById('navLinks');

@@ -21,7 +21,10 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html {
+  overflow-y: scroll; /* Prevent horizontal jump between pages */
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: 'DM Sans', sans-serif;
@@ -38,7 +41,7 @@ body {
   backdrop-filter: blur(14px);
   border-bottom: 1.5px solid var(--border);
   padding: 0 40px;
-  height: 68px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1218,4 +1221,91 @@ footer {
   .auth-form-wrap { padding: 24px; }
   .modal { padding: 28px 20px; }
   .contact-section, .feedback-section, .account-section { padding: 40px 20px 60px; }
+}
+/* Custom Dialog Styles */
+.custom-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.custom-modal-overlay.active {
+  display: flex;
+}
+
+.custom-dialog-box {
+  background: white;
+  padding: 40px 32px;
+  border-radius: 20px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  animation: dialogPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dialogPop {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.dialog-icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.dialog-title {
+  font-size: 1.5rem;
+  font-family: 'Playfair Display', serif;
+  color: var(--secondary);
+  margin-bottom: 12px;
+}
+
+.dialog-msg {
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.dialog-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-size: 0.95rem;
+}
+
+.btn-cancel {
+  background: var(--bg2);
+  color: var(--text-muted);
+}
+
+.btn-cancel:hover {
+  background: var(--border);
+}
+
+.btn-confirm {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-confirm:hover {
+  background: #e67e22;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(230,126,34,0.3);
 }
