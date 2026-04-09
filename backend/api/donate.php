@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 
-require_once 'db.php';
+require_once '../config/db.php';
 
 $user_id = $_POST['user_id'] ?? 1; 
 
@@ -26,7 +26,7 @@ if (!$category || !$user_name || !$mobile || !$address) {
 
 $image_path = null;
 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-    $upload_dir = 'uploads/donations/';
+    $upload_dir = '../../uploads/donations/';
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0777, true);
     }

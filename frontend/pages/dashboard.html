@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard — Helping Hands</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
 </head>
 <body>\
 
@@ -262,7 +262,7 @@
   </div>
 </div>
 
-<script src="app.js"></script>
+<script src="../assets/js/app.js"></script>
 <script>
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -313,7 +313,7 @@ async function submitDonation(e, type) {
   btn.disabled = true;
 
   try {
-    const response = await fetch('donate.php', {
+    const response = await fetch('../../backend/api/donate.php', {
       method: 'POST',
       body: formData
     });
@@ -348,7 +348,7 @@ async function renderHistory() {
   const empty = document.getElementById('emptyHistory');
 
   try {
-    const response = await fetch(`get_donations.php?user_id=${user.id || 1}`);
+    const response = await fetch(`../../backend/api/get_donations.php?user_id=${user.id || 1}`);
     const result = await response.json();
     
     if (result.success && result.donations.length > 0) {
