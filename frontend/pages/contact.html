@@ -149,14 +149,51 @@
 <script>
 async function submitContact(e) {
   e.preventDefault();
-  const user = localStorage.getItem('hh_user');
+  const user = JSON.parse(localStorage.getItem('hh_user') || 'null');
+  
   if (!user) {
     await customAlert('Please login to send us a message.', 'Login Required', '📩');
     window.location.href = 'login.html';
     return;
   }
-  document.getElementById('successPopup').classList.add('active');
-  e.target.reset();
+
+  // Get form elements
+  const form = e.target;
+  const inputs = form.querySelectorAll('input, select, textarea');
+  
+  const formData = {
+    name: inputs[0].value,
+    email: inputs[1].value,
+    phone: inputs[2].value,
+    subject: inputs[3].value,
+    message: inputs[4].value
+  };
+
+  try {
+    const btn = form.querySelector('button');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    const response = await fetch('../../backend/api/submit_message.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      document.getElementById('successPopup').classList.add('active');
+      form.reset();
+    } else {
+      customAlert(result.message, 'Error', '❌');
+    }
+  } catch (error) {
+    customAlert('Failed to send message. Please try again.', 'Error', '❌');
+  } finally {
+    const btn = form.querySelector('button');
+    btn.disabled = false;
+    btn.textContent = 'Send Message 📤';
+  }
 }
 
 const faqs = [
