@@ -82,6 +82,10 @@ CREATE TABLE IF NOT EXISTS contact_messages (
 CREATE TABLE IF NOT EXISTS help_requests (
   id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id     INT UNSIGNED NOT NULL,
+  contact_name VARCHAR(100)       NOT NULL,
+  mobile      VARCHAR(15)         NOT NULL,
+  alternate_mobile VARCHAR(15),
+  address     TEXT                NOT NULL,
   category    VARCHAR(50)         NOT NULL,
   items       TEXT                NOT NULL,
   reason      TEXT                NOT NULL,
@@ -93,13 +97,15 @@ CREATE TABLE IF NOT EXISTS help_requests (
 
 CREATE TABLE IF NOT EXISTS distributions (
   id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  request_id  INT UNSIGNED NOT NULL,
+  request_id  INT UNSIGNED,
   donation_id INT UNSIGNED,
+  product_name VARCHAR(100)       NOT NULL,
+  receiver_name VARCHAR(100)      NOT NULL,
   admin_id    INT UNSIGNED,
   proof_image VARCHAR(300),
   notes       TEXT,
-  distributed_at DATETIME         NOT NULL,
-  FOREIGN KEY (request_id) REFERENCES help_requests(id) ON DELETE CASCADE,
+  distributed_at DATE             NOT NULL,
+  FOREIGN KEY (request_id) REFERENCES help_requests(id) ON DELETE SET NULL,
   FOREIGN KEY (donation_id) REFERENCES donations(id) ON DELETE SET NULL,
   FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;

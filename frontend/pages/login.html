@@ -125,7 +125,7 @@ async function handleLogin(e) {
       setTimeout(() => { 
         const role = (result.user.role || '').toLowerCase();
         if (role === 'admin') {
-          window.location.href = '../admin/dashboard.html';
+          window.location.href = '../admin/admin_dashboard.html';
         } else {
           window.location.href = 'dashboard.html';
         }
@@ -216,7 +216,7 @@ function closeSuccess() {
   const role = (user.role || '').toLowerCase();
   
   if (role === 'admin') {
-    window.location.href = '../admin/dashboard.html';
+    window.location.href = '../admin/admin_dashboard.html';
   } else {
     window.location.href = 'dashboard.html';
   }

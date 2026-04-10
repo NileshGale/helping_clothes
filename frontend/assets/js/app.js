@@ -44,7 +44,7 @@ function initNavbar() {
 
   // Define Hrefs based on role
   const userRole = user ? user.role : 'user';
-  const dashboardHref = (userRole === 'admin') ? (adminPath + 'dashboard.html') : (pagePath + 'dashboard.html');
+  const dashboardHref = (userRole === 'admin') ? (adminPath + 'admin_dashboard.html') : (pagePath + 'dashboard.html');
 
   // Define All Links
   const links = [

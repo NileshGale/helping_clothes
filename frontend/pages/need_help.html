@@ -33,33 +33,65 @@
       </p>
       
       <form onsubmit="submitHelpRequest(event)">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="reqName" placeholder="Enter your name" required/>
+          </div>
+          <div class="form-group">
+            <label>Registration Email</label>
+            <input type="email" id="reqEmail" readonly style="background:var(--bg2); cursor:not-allowed;"/>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input type="tel" id="reqMobile" placeholder="10-digit number" pattern="[0-9]{10}" required/>
+          </div>
+          <div class="form-group" style="position:relative;">
+            <label>Alternate Number <span style="font-weight:400; font-size:0.75rem; color:var(--text-muted);">(Optional)</span></label>
+            <input type="tel" id="reqAltMobile" placeholder="Secondary contact" pattern="[0-9]{10}"/>
+            <small style="position:absolute; bottom:-18px; left:0; font-size:0.7rem; color:var(--primary);">For better coordination 📞</small>
+          </div>
+        </div>
+
         <div class="form-group">
-          <label>Type of Clothing Needed</label>
-          <select id="reqCategory" required>
-            <option value="">Select Clothing Type</option>
-            <option value="Shirt">Shirt</option>
-            <option value="T-Shirt">T-Shirt</option>
-            <option value="Pant">Pant / Jeans</option>
-            <option value="Jacket">Jacket / Sweater</option>
-            <option value="Saree">Saree</option>
-            <option value="Kidswear">Kids Wear</option>
-            <option value="Others">Others</option>
+          <label>Local Delivery Address</label>
+          <textarea id="reqAddress" placeholder="Full address with landmark where items should be delivered" style="min-height:80px;" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>What category of help do you need?</label>
+          <select id="mainCategory" onchange="updateSubTypes()" required>
+            <option value="">Select Category</option>
+            <option value="clothes">Clothes 👕</option>
+            <option value="toys">Toys 🧸</option>
+            <option value="stationery">Stationery 📚</option>
+            <option value="charity">General Charity ❤️</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="subTypeGroup">
+          <label>Specific Type Needed</label>
+          <select id="reqCategory" required disabled>
+            <option value="">Select category first...</option>
           </select>
         </div>
         
         <div class="form-group">
-          <label>What specific items do you need?</label>
-          <textarea id="reqItems" placeholder="Example: School books for 5th grade, Warm clothes for kids..." required></textarea>
+          <label>Specific details about the items</label>
+          <textarea id="reqItems" placeholder="Example: 5th grade school books, Size 8 shirts for kids..." required></textarea>
         </div>
         
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom:12px;">
           <label>Reason for Request</label>
-          <textarea id="reqReason" placeholder="Tell us a bit about your situation..." style="min-height:120px;" required></textarea>
+          <textarea id="reqReason" placeholder="Tell us a bit about your situation..." style="min-height:100px;" required></textarea>
         </div>
 
         <div style="background: var(--bg2); padding: 16px; border-radius: 12px; margin-bottom: 24px;">
           <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">
-            <strong>Note:</strong> We prioritize requests based on urgency and item availability. Submitting a request does not guarantee fulfillment, but we try our best for everyone.
+            <strong>Note:</strong> We prioritize requests based on urgency and item availability. Submitting a request does not guarantee fulfillment.
           </p>
         </div>
 
@@ -71,6 +103,34 @@
 
 <script src="../assets/js/app.js"></script>
 <script>
+const subTypes = {
+  clothes: ["Shirt", "T-Shirt", "Pant / Jeans", "Jacket / Sweater", "Saree", "Kids Wear", "Others"],
+  toys: ["Educational Toys", "Board Games", "Dolls / Stuffed Animals", "Action Figures", "Puzzles", "Others"],
+  stationery: ["Books / Notebooks", "Pen / Pencils", "School Bag", "Geometry Box", "Art Supplies", "Others"],
+  charity: ["Household Items", "Appliances", "Food / Ration", "Medicine / First Aid", "Others"]
+};
+
+function updateSubTypes() {
+  const main = document.getElementById('mainCategory').value;
+  const subSelect = document.getElementById('reqCategory');
+  
+  // Clear options
+  subSelect.innerHTML = '<option value="">Select Specific Type</option>';
+  
+  if (main && subTypes[main]) {
+    subSelect.disabled = false;
+    subTypes[main].forEach(type => {
+      const opt = document.createElement('option');
+      opt.value = type;
+      opt.innerText = type;
+      subSelect.appendChild(opt);
+    });
+  } else {
+    subSelect.disabled = true;
+    subSelect.innerHTML = '<option value="">Select category first...</option>';
+  }
+}
+
 async function submitHelpRequest(e) {
   e.preventDefault();
   
@@ -81,14 +141,25 @@ async function submitHelpRequest(e) {
     return;
   }
 
+  const mainCat = document.getElementById('mainCategory').value;
+  const subCat = document.getElementById('reqCategory').value;
+
   const formData = {
     user_id: user.id,
-    category: document.getElementById('reqCategory').value,
+    name: document.getElementById('reqName').value,
+    mobile: document.getElementById('reqMobile').value,
+    alternate_mobile: document.getElementById('reqAltMobile').value,
+    address: document.getElementById('reqAddress').value,
+    category: `${mainCat}: ${subCat}`,
     items: document.getElementById('reqItems').value,
     reason: document.getElementById('reqReason').value
   };
 
   try {
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Submitting Request... ⏳';
+
     const response = await fetch('../../backend/api/submit_request.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -99,14 +170,32 @@ async function submitHelpRequest(e) {
     if (result.success) {
       await customAlert('Your request has been submitted to our admin team. We will contact you soon.', 'Request Submitted', '✅');
       e.target.reset();
+      // Re-fill defaults
+      fillDefaults();
     } else {
       customAlert(result.message || 'Error submitting request.', 'Error', '❌');
     }
   } catch (err) {
     console.error(err);
     customAlert('Failed to connect to server.', 'Error', '❌');
+  } finally {
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = false;
+    btn.textContent = 'Submit My Request 🕊️';
   }
 }
+
+function fillDefaults() {
+  const user = JSON.parse(localStorage.getItem('hh_user') || '{}');
+  if (user.name) document.getElementById('reqName').value = user.name;
+  if (user.email) document.getElementById('reqEmail').value = user.email;
+  if (user.mobile) document.getElementById('reqMobile').value = user.mobile;
+  if (user.address) document.getElementById('reqAddress').value = user.address;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  fillDefaults();
+});
 </script>
 </body>
 </html>
