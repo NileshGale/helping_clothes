@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard — Helping Hands</title>
   <link rel="stylesheet" href="../assets/css/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     .admin-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
     .admin-sidebar { background: var(--secondary); color: white; padding: 40px 20px; }
@@ -55,6 +56,7 @@
       <li><a href="#" onclick="switchTab('inbox')">📧 Support Inbox</a></li>
       <li><a href="#" onclick="switchTab('users')">👥 User Management</a></li>
       <li><a href="#" onclick="switchTab('distributions')">📸 Proof & Impact</a></li>
+      <li><a href="#" onclick="switchTab('analytics')">📈 Analytics</a></li>
     </ul>
 
     <div style="margin-top:auto; padding-top:40px;">
@@ -283,6 +285,33 @@
       </div>
     </div>
 
+    <!-- Tab: Analytics -->
+    <div id="tab-analytics" class="tab-pane">
+       <h2 style="font-family:'Playfair Display',serif; margin-bottom:24px;">Platform Performance & Insights</h2>
+       
+       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:32px; margin-bottom:32px;">
+         <div style="background:white; padding:32px; border-radius:12px; box-shadow:var(--shadow);">
+           <h3 style="margin-bottom:20px; font-size:1.1rem;">Donations by Category</h3>
+           <div style="height:300px;"><canvas id="categoryChart"></canvas></div>
+         </div>
+         <div style="background:white; padding:32px; border-radius:12px; box-shadow:var(--shadow);">
+           <h3 style="margin-bottom:20px; font-size:1.1rem;">Monthly Donation Trend</h3>
+           <div style="height:300px;"><canvas id="donationTrendChart"></canvas></div>
+         </div>
+       </div>
+
+       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:32px;">
+         <div style="background:white; padding:32px; border-radius:12px; box-shadow:var(--shadow);">
+           <h3 style="margin-bottom:20px; font-size:1.1rem;">User Growth (New Members)</h3>
+           <div style="height:300px;"><canvas id="userGrowthChart"></canvas></div>
+         </div>
+         <div style="background:white; padding:32px; border-radius:12px; box-shadow:var(--shadow);">
+           <h3 style="margin-bottom:20px; font-size:1.1rem;">Request Fulfillment Status</h3>
+           <div style="height:300px;"><canvas id="requestStatusChart"></canvas></div>
+         </div>
+       </div>
+    </div>
+
 <script src="../assets/js/app.js"></script>
 <script>
 // Dashboard State & Auth
@@ -306,6 +335,77 @@ function switchTab(tab) {
   if (tab === 'inbox') loadInbox();
   if (tab === 'users') loadUsers();
   if (tab === 'distributions') loadImpactProofs();
+  if (tab === 'analytics') loadAnalytics();
+}
+
+let charts = {};
+
+async function loadAnalytics() {
+  const res = await fetch('../../backend/api/admin/get_analytics.php');
+  const d = await res.json();
+  if (!d.success) return;
+
+  const data = d.analytics;
+
+  // Cleanup old charts
+  Object.values(charts).forEach(c => c.destroy());
+
+  // 1. Category Pie Chart
+  charts.category = new Chart(document.getElementById('categoryChart'), {
+    type: 'pie',
+    data: {
+      labels: data.categories.map(c => c.category),
+      datasets: [{
+        data: data.categories.map(c => c.count),
+        backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
+      }]
+    },
+    options: { maintainAspectRatio: false }
+  });
+
+  // 2. Donation Trend (Line)
+  charts.trend = new Chart(document.getElementById('donationTrendChart'), {
+    type: 'line',
+    data: {
+      labels: data.donationsTrend.map(t => t.label),
+      datasets: [{
+        label: 'Donation Count',
+        data: data.donationsTrend.map(t => t.count),
+        borderColor: '#4f46e5',
+        tension: 0.3,
+        fill: true,
+        backgroundColor: 'rgba(79, 70, 229, 0.1)'
+      }]
+    },
+    options: { maintainAspectRatio: false }
+  });
+
+  // 3. User Growth (Bar)
+  charts.users = new Chart(document.getElementById('userGrowthChart'), {
+    type: 'bar',
+    data: {
+      labels: data.usersTrend.map(t => t.label),
+      datasets: [{
+        label: 'New Users',
+        data: data.usersTrend.map(t => t.count),
+        backgroundColor: '#10b981'
+      }]
+    },
+    options: { maintainAspectRatio: false }
+  });
+
+  // 4. Request Status (Doughnut)
+  charts.status = new Chart(document.getElementById('requestStatusChart'), {
+    type: 'doughnut',
+    data: {
+      labels: data.requestStats.map(s => s.status),
+      datasets: [{
+        data: data.requestStats.map(s => s.count),
+        backgroundColor: ['#f59e0b', '#10b981', '#ef4444']
+      }]
+    },
+    options: { maintainAspectRatio: false, cutout: '65%' }
+  });
 }
 
 async function loadStats() {

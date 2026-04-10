@@ -1184,12 +1184,12 @@ footer {
   backdrop-filter: blur(6px);
 }
 
-.photo-bg.clothes { background: linear-gradient(135deg, #f093fb, #f5576c); }
-.photo-bg.toys    { background: linear-gradient(135deg, #43e97b, #38f9d7); }
-.photo-bg.books   { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-.photo-bg.food    { background: linear-gradient(135deg, #fa709a, #fee140); }
-.photo-bg.charity { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
-.photo-bg.care    { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+.photo-bg.clothes { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../../../backend/uploads/clothes_cat.jpg') center/cover; }
+.photo-bg.toys    { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../../../backend/uploads/toy_cat.jpg') center/cover; }
+.photo-bg.books   { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../../../backend/uploads/stationery_cat.jpg') center/cover; }
+.photo-bg.food    { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../../../backend/uploads/food_cat.jpg') center/cover; }
+.photo-bg.charity { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../../../backend/uploads/charity_cat.jpg') center/cover; }
+.photo-bg.care    { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../../../backend/uploads/healthcare_cat.jpg') center/cover; }
 
 .alert {
   padding: 12px 18px;
